@@ -1,11 +1,14 @@
 import { Button } from "@chakra-ui/react";
 import { TbExternalLink } from "react-icons/tb";
+import { useTranslation } from "react-i18next";
 
 export default function TestNotification() {
+    const { t } = useTranslation();
+
     return (
         <div className="flexx facenter fillx gap20 buttonContainer">
-            <label>Spawn Test Notification</label>
-            <Button style={{ marginLeft: "auto" }} className="iconButton" onClick={() => igniteView.commandBridge.SpawnTestNotification()}>
+            <label>{t('settings.spawnTestNotification')}</label>
+            <Button style={{ marginInlineStart: "auto" }} className="iconButton" onClick={() => igniteView.commandBridge.SpawnTestNotification()}>
                 <TbExternalLink />
             </Button>
         </div>

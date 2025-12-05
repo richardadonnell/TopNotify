@@ -1,19 +1,20 @@
-
+import { Button, Divider, Slider, SliderFilledTrack, SliderThumb, SliderTrack, Switch } from "@chakra-ui/react";
 import {
     Drawer,
     DrawerBody,
+    DrawerCloseButton,
+    DrawerContent,
     DrawerFooter,
     DrawerHeader,
-    DrawerOverlay,
-    DrawerContent,
-    DrawerCloseButton
+    DrawerOverlay
 } from "@chakra-ui/react";
-
-import { Button, Switch, Slider, SliderTrack, SliderFilledTrack, SliderThumb, Divider } from "@chakra-ui/react";
-import { useState } from "react";
 import {TbChevronDown, TbExternalLink, TbX} from "react-icons/tb";
 
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+
 export function DebugMenu() {
+    const { t } = useTranslation();
 
     let [isOpen, _setIsOpen] = useState(false);
 
@@ -47,12 +48,12 @@ export function DebugMenu() {
                         <Button className="iconButton" onClick={() => setIsOpen(false)}><TbChevronDown/></Button>
                     </div>
 
-                    <DrawerHeader>Debug Menu</DrawerHeader>
+                    <DrawerHeader>{t('debug.title')}</DrawerHeader>
 
                     <DrawerBody>
                         <div className="flexx facenter fillx gap20 buttonContainer">
-                            <label>Open App Folder</label>
-                            <Button style={{ marginLeft: "auto" }} className="iconButton" onClick={() => { igniteView.commandBridge.OpenAppFolder(); }}>
+                            <label>{t('debug.openAppFolder')}</label>
+                            <Button style={{ marginInlineStart: "auto" }} className="iconButton" onClick={() => { igniteView.commandBridge.OpenAppFolder(); }}>
                                 <TbExternalLink/>
                             </Button>
                         </div>
@@ -60,15 +61,15 @@ export function DebugMenu() {
                         <Divider />
 
                         <div className="flexx facenter fillx gap20">
-                            <label>Force Fallback Interceptor</label>
-                            <Switch onChange={(e) => ChangeSwitch("EnableDebugForceFallbackMode", e)} isChecked={Config.EnableDebugForceFallbackMode} style={{ marginLeft: "auto" }} size='lg' />
+                            <label>{t('debug.forceFallbackInterceptor')}</label>
+                            <Switch onChange={(e) => ChangeSwitch("EnableDebugForceFallbackMode", e)} isChecked={Config.EnableDebugForceFallbackMode} style={{ marginInlineStart: "auto" }} size='lg' />
                         </div>
 
                         <Divider />
 
                         <div className="flexx facenter fillx gap20">
-                            <label>Disable Bounds Correction</label>
-                            <Switch onChange={(e) => ChangeSwitch("EnableDebugRemoveBoundsCorrection", e)} isChecked={Config.EnableDebugRemoveBoundsCorrection} style={{ marginLeft: "auto" }} size='lg' />
+                            <label>{t('debug.disableBoundsCorrection')}</label>
+                            <Switch onChange={(e) => ChangeSwitch("EnableDebugRemoveBoundsCorrection", e)} isChecked={Config.EnableDebugRemoveBoundsCorrection} style={{ marginInlineStart: "auto" }} size='lg' />
                         </div>
                     </DrawerBody>
 

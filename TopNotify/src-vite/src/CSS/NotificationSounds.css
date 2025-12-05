@@ -5,12 +5,12 @@
 }
 
 .appReferenceSoundItem .selectSoundButton {
-    margin-left: auto;
+    margin-inline-start: auto;
     width: 200px;
 }
 
 .appReferenceSoundItem .selectSoundButton * {
-    float: right;
+    float: inline-end;
 }
 
 .appReferenceSoundItem img, .appReferenceSoundItem > svg {

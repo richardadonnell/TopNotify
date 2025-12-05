@@ -1,9 +1,13 @@
-import { Button, Switch, Slider, SliderTrack, SliderFilledTrack, SliderThumb, Divider } from "@chakra-ui/react";
+import { Button, Divider, Slider, SliderFilledTrack, SliderThumb, SliderTrack, Switch } from "@chakra-ui/react";
+
+import { useTranslation } from "react-i18next";
 
 export default function NotificationTransparency() {
+    const { t } = useTranslation();
+
     return (
         <div className="flexy fillx gap10">
-            <label>Notification Transparency</label>
+            <label>{t('settings.notificationTransparency')}</label>
             {
                 //Slider Is In Uncontrolled Mode For Performance Reasons
                 //So We Need To Wait For The Config To Load Before Setting The Default Value

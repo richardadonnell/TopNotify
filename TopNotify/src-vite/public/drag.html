@@ -29,6 +29,7 @@
             width: 100%;
             height: 100vh;
             align-items: center;
+            /* Flexbox will auto-reverse in RTL mode */
         }
 
         .dragMode img {
@@ -40,7 +41,7 @@
         .coordinates {
             color: white;
             position: absolute;
-            right: 16vh;
+            inset-inline-end: 16vh;
             bottom: 16vh;
             font-size: 12vh;
             margin: 0;
@@ -76,6 +77,13 @@
     </div>
 
     <script>
+        // Set RTL direction based on stored language preference
+        const rtlLanguages = ['ar', 'he'];
+        const storedLang = localStorage.getItem('topnotify-language');
+        if (storedLang && rtlLanguages.includes(storedLang.split('-')[0])) {
+            document.documentElement.dir = 'rtl';
+            document.documentElement.lang = storedLang;
+        }
 
         window.updateCoordinates = (x, y) => {
             document.querySelector(".coordinates").innerText = `(${x}, ${y})`

@@ -1,16 +1,18 @@
 import { Button, Container, Divider } from "@chakra-ui/react";
-import { useState } from "react";
 import {TbAlertTriangle, TbCurrencyDollar, TbInfoCircle, TbX} from "react-icons/tb";
+
 import ClickThrough from "./ClickThrough";
 import { DebugMenu } from "./DebugMenu";
-import { useFirstRender } from "./Helper";
-import MonitorSelect from "./MonitorSelect";
 import ManageNotificationSounds from "./NotificationSounds";
+import MonitorSelect from "./MonitorSelect";
+import NotificationTransparency from "./Transparency";
 import Preview from "./Preview";
 import ReadAloud from "./ReadAloud";
 import SoundInterceptionToggle from "./SoundInterceptionToggle";
 import TestNotification from "./TestNotification";
-import NotificationTransparency from "./Transparency";
+import { useFirstRender } from "./Helper";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 window.Config = {
     Location: -1,
@@ -49,6 +51,7 @@ window.ChangeValue = function (key, e) {
 };
 
 function App() {
+    const { t } = useTranslation();
 
     let [rerender, setRerender] = useState(0);
     window.rerender = rerender;
@@ -65,7 +68,7 @@ function App() {
 
             <div data-webview-drag className="draggableHeader">
                 <img src="/Image/IconTiny.png"></img>
-                <h2>TopNotify</h2>
+                <h2>{t('app.title')}</h2>
             </div>
 
             <div className="windowCloseButton">
@@ -99,8 +102,8 @@ function App() {
             </Container>
 
             <div className='aboutButtons'>
-                <Button onClick={() => igniteView.commandBridge.About()}><TbInfoCircle/>About TopNotify</Button>
-                <Button onClick={() => igniteView.commandBridge.Donate()}><TbCurrencyDollar/>Donate</Button>
+                <Button onClick={() => igniteView.commandBridge.About()}><TbInfoCircle/>{t('app.about')}</Button>
+                <Button onClick={() => igniteView.commandBridge.Donate()}><TbCurrencyDollar/>{t('app.donate')}</Button>
             </div>
         </div>
     );

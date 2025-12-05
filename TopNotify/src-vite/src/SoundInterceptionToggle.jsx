@@ -1,7 +1,10 @@
-import { Button, Switch, Slider, SliderTrack, SliderFilledTrack, SliderThumb, Divider } from "@chakra-ui/react";
+import { Button, Divider, Slider, SliderFilledTrack, SliderThumb, SliderTrack, Switch } from "@chakra-ui/react";
+
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function SoundInterceptionToggle() {
+    const { t } = useTranslation();
 
     let [isInterceptionEnabled, setIsInterceptionEnabled] = useState(false);
     let [checkState, setCheckState] = useState("none");
@@ -31,8 +34,8 @@ export default function SoundInterceptionToggle() {
 
     return (
         <div className="flexx facenter fillx gap20">
-            <label>Enable Custom Sounds</label>
-            <Switch onChange={(e) => setEnabled(e.target.checked)} isChecked={isInterceptionEnabled} style={{ marginLeft: "auto" }} size='lg' />
+            <label>{t('settings.enableCustomSounds')}</label>
+            <Switch onChange={(e) => setEnabled(e.target.checked)} isChecked={isInterceptionEnabled} style={{ marginInlineStart: "auto" }} size='lg' />
         </div>
     );
 }
