@@ -17,7 +17,17 @@ namespace TopNotify.GUI
 {
     public static class DragModeCommands
     {
-        public static WebWindow? DragModeWindow { get; set; } = null;
+        private static readonly object _dragModeLock = new object();
+        private static WebWindow? _dragModeWindow = null;
+
+        /// <summary>
+        /// Thread-safe access to the drag mode window.
+        /// </summary>
+        public static WebWindow? DragModeWindow
+        {
+            get { lock (_dragModeLock) { return _dragModeWindow; } }
+            set { lock (_dragModeLock) { _dragModeWindow = value; } }
+        }
 
         #region WinAPI
 
@@ -74,7 +84,7 @@ namespace TopNotify.GUI
                 .WithTitle("")
                 .WithoutTitleBar()
                 .WithBounds(windowBounds)
-                .With((w) => ((w as Win32WebWindow)!).BackgroundMode = Win32WebWindow.WindowBackgroundMode.Acrylic)
+                .With((w) => { if (w is Win32WebWindow win) win.BackgroundMode = Win32WebWindow.WindowBackgroundMode.Acrylic; })
                 .Show();
 
             SetForegroundWindow(DragModeWindow.NativeHandle);
@@ -141,10 +151,19 @@ namespace TopNotify.GUI
         public static void DragModeThread()
         {
             Point cursorPos;
-            IntPtr dragModeHandle = DragModeWindow!.NativeHandle;
 
-            while (DragModeWindow != null)
+            // Capture window reference once at start for the handle
+            var window = DragModeWindow;
+            if (window == null) return;
+
+            IntPtr dragModeHandle = window.NativeHandle;
+
+            while (true)
             {
+                // Check if drag mode is still active
+                var currentWindow = DragModeWindow;
+                if (currentWindow == null) break;
+
                 //Set The Drag Mode Window To Be At The Cursor's Position
                 GetCursorPos(out cursorPos);
 
@@ -154,7 +173,7 @@ namespace TopNotify.GUI
                 cursorPos.Y -= 30;
 
                 SetWindowPos(dragModeHandle, 0, cursorPos.X, cursorPos.Y, 0, 0, 0x0001);
-                DragModeWindow?.CallFunction("window.updateCoordinates", cursorPos.X, cursorPos.Y);
+                currentWindow.CallFunction("window.updateCoordinates", cursorPos.X, cursorPos.Y);
 
                 Thread.Sleep(0);
             }
