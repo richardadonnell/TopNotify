@@ -65,7 +65,7 @@ namespace TopNotify.Daemon
         #endregion
 
         public IntPtr hwnd;
-        public ExtendedStyleManager ExStyleManager;
+        public ExtendedStyleManager ExStyleManager = null!;
         public int ScaledPreferredDisplayWidth;
         public int ScaledPreferredDisplayHeight;
         public int RealPreferredDisplayWidth;

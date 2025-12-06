@@ -10,7 +10,7 @@ namespace TopNotify.Daemon
 {
     public class ReadAloudInterceptor : Interceptor
     {
-        SpeechSynthesizer Synthesizer;
+        SpeechSynthesizer Synthesizer = null!;
 
         public override void OnNotification(UserNotification notification)
         {

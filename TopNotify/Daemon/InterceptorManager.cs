@@ -20,16 +20,16 @@ namespace TopNotify.Daemon
 
         #endregion
 
-        public static InterceptorManager Instance;
+        public static InterceptorManager Instance = null!;
         public List<Interceptor> Interceptors = new();
 
-        public Settings CurrentSettings;
+        public Settings CurrentSettings = null!;
 
         public int TimeSinceReflow = 0;
         public const int ReflowTimeout = 50;
 
         public ConcurrentDictionary<uint, Action?> CleanUpFunctions = new ConcurrentDictionary<uint, Action?>(); // Maps HandledNotifications to the associated clean up function
-        public UserNotificationListener Listener;
+        public UserNotificationListener Listener = null!;
         public bool CanListenToNotifications = false;
 
         public static Interceptor[] InstalledInterceptors =
@@ -74,7 +74,7 @@ namespace TopNotify.Daemon
                     //Currently no workaround
                     Listener.NotificationChanged += OnNotificationChanged;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     var msg = "Failed To Start Notification Listener: Not Packaged";
                     DaemonErrorHandler.ThrowNonCritical(new DaemonError("listener_failure_not_packaged", msg));
@@ -119,7 +119,7 @@ namespace TopNotify.Daemon
                 {
                     i.Reflow();
                 }
-                catch (Exception ex) { }
+                catch (Exception) { }
             }
         }
 
@@ -131,7 +131,7 @@ namespace TopNotify.Daemon
                 {
                     i.Update();
                 }
-                catch (Exception ex) { }
+                catch (Exception) { }
             }
         }
 
@@ -150,7 +150,7 @@ namespace TopNotify.Daemon
                 {
                     i.OnKeyUpdate();
                 }
-                catch (Exception ex) { }
+                catch (Exception) { }
             }
         }
 
@@ -160,7 +160,7 @@ namespace TopNotify.Daemon
             var userNotifications = await Listener.GetNotificationsAsync(NotificationKinds.Toast);
             var userNotification = userNotifications.Where((n) => n.Id == args.UserNotificationId).FirstOrDefault();
 
-            if (args.ChangeKind == UserNotificationChangedKind.Added)
+            if (args.ChangeKind == UserNotificationChangedKind.Added && userNotification != null)
             {
                 foreach (Interceptor i in Interceptors)
                 {
@@ -186,7 +186,7 @@ namespace TopNotify.Daemon
                     i.Restart();
                     i.Reflow();
                 }
-                catch (Exception ex) { }
+                catch (Exception) { }
             }
         }
     }

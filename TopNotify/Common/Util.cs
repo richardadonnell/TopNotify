@@ -26,7 +26,7 @@ namespace TopNotify.Common
             cmdsi.RedirectStandardOutput = true;
             cmdsi.UseShellExecute = false;
             cmdsi.CreateNoWindow = true;
-            var cmd = Process.Start(cmdsi);
+            var cmd = Process.Start(cmdsi)!;
             var output = cmd.StandardOutput.ReadToEnd();
 
             cmd.WaitForExit();

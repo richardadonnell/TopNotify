@@ -12,22 +12,22 @@ namespace TopNotify.Common
         /// <summary>
         /// Used By TopNotify To Identify The Monitor
         /// </summary>
-        public string ID;
+        public required string ID;
 
         /// <summary>
         /// The Path To The Monitor, Eg. \\.\DISPLAY1\...
         /// </summary>
-        public string Path;
+        public required string Path;
 
         /// <summary>
         /// The Friendly Name Of The Monitor
         /// </summary>
-        public string FriendlyName;
+        public required string FriendlyName;
 
         /// <summary>
         /// The Name Of The GPU As Reported By Windows, Eg: RADEON RX 7800 XT
         /// </summary>
-        public string GraphicsDriverName;
+        public required string GraphicsDriverName;
 
         /// <summary>
         /// The Name Shown To The User

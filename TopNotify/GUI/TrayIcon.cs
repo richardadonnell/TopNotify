@@ -16,8 +16,8 @@ namespace TopNotify.GUI
     /// </summary>
     public class TrayIcon
     {
-        public static Assembly WinForms;
-        public static dynamic Application = null;
+        public static Assembly WinForms = null!;
+        public static dynamic? Application = null;
 
 
         /// <summary>
@@ -29,9 +29,9 @@ namespace TopNotify.GUI
 
             AppDomain.CurrentDomain.AssemblyResolve += FindAssembly;
 
-            dynamic notify = null;
-            dynamic menuStrip = null;
-            dynamic handler = null;
+            dynamic? notify = null;
+            dynamic? menuStrip = null;
+            dynamic? handler = null;
 
             //Find WinForms Types
             foreach (Type type in WinForms.GetExportedTypes())
@@ -40,7 +40,7 @@ namespace TopNotify.GUI
                 {
                     Application = type.GetMethods()
                         .Where((method) => method.Name == "Run" && method.IsStatic && method.GetParameters().Length == 0)
-                        .First();
+                        .FirstOrDefault();
                 }
                 else if (type.Name == "NotifyIcon")
                 {
@@ -55,12 +55,12 @@ namespace TopNotify.GUI
                 else if (type.Name == "ToolStripItemClickedEventHandler")
                 {
                     // handler = new ToolStripItemClickedEventHandler(Quit);
-                    handler = Delegate.CreateDelegate(type, typeof(TrayIcon).GetMethod(nameof(OnTrayButtonClicked)));
+                    handler = Delegate.CreateDelegate(type, typeof(TrayIcon).GetMethod(nameof(OnTrayButtonClicked))!);
                 }
             }
 
             //Use WinForms Methods To Create A Tray Icon
-            notify.Visible = true;
+            notify!.Visible = true;
             notify.Icon = Util.FindAppIcon();
             notify.Text = Strings.TrayIconTooltip;
             notify.DoubleClick += new EventHandler(LaunchSettingsMode);
@@ -84,15 +84,15 @@ namespace TopNotify.GUI
 
         public static void MainLoop()
         {
-            Application.Invoke(null, null);
+            Application!.Invoke(null, null);
         }
 
 
         public static void OnTrayButtonClicked(object Sender, EventArgs e)
         {
             // var item = e.ClickedItem;
-            var item = e.GetType().GetProperty("ClickedItem")!.GetValue(e);
-            var itemText = item.GetType().GetProperty("Text")!.GetValue(item).ToString();
+            var item = e.GetType().GetProperty("ClickedItem")!.GetValue(e)!;
+            var itemText = item.GetType().GetProperty("Text")!.GetValue(item)!.ToString();
 
             if (itemText == Strings.TrayMenuBugReport)
             {
@@ -124,7 +124,7 @@ namespace TopNotify.GUI
             Environment.Exit(0);
         }
 
-        public static void LaunchSettingsMode(object Sender, EventArgs e)
+        public static void LaunchSettingsMode(object? Sender, EventArgs e)
         {
             try
             {
@@ -134,7 +134,7 @@ namespace TopNotify.GUI
                 psi.WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory;
                 var proc = Process.Start(psi);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 
             }

@@ -22,7 +22,7 @@ namespace TopNotify.GUI
             {
 
                 // Send The Current Wallpaper
-                var wallpaperFile = CopyWallpaper(); 
+                var wallpaperFile = CopyWallpaper()!; 
 
                 var fileStream = new FileStream(wallpaperFile, FileMode.Open, FileAccess.Read);
 
@@ -41,7 +41,7 @@ namespace TopNotify.GUI
             ctx.Response.StatusCode = 404;
         }
 
-        public static string CopyWallpaper()
+        public static string? CopyWallpaper()
         {
             //Workaround For File System Write Virtualization
             //The UWP Runtime Won't Let Us Read From AppData

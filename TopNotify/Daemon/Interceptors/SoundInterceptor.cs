@@ -23,7 +23,7 @@ namespace TopNotify.Daemon
         // This File Is Used To Replace The Default Notification Sounds, So That TopNotify Can Play A Different Sound
         const string FAKE_SOUND = "internal/silent";
 
-        SoundPlayer Player;
+        SoundPlayer Player = null!;
         bool isPlaying = false;
 
         bool allowedToPlaySound = false;
@@ -40,7 +40,7 @@ namespace TopNotify.Daemon
                 var command = $"reg add HKCU\\AppEvents\\Schemes\\Apps\\.Default\\Notification.Default\\.Current /t REG_SZ /ve /d \"{GetCopiedSoundPath(FAKE_SOUND)}\" /f";
                 Util.SimpleCMD(command);
             }
-            catch (Exception ex) { }
+            catch (Exception) { }
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace TopNotify.Daemon
                 var command = $"reg add HKCU\\AppEvents\\Schemes\\Apps\\.Default\\Notification.Default\\.Current /t REG_SZ /ve /d \"{defaultSoundPath}\" /f";
                 Util.SimpleCMD(command);
             }
-            catch (Exception ex) { }
+            catch (Exception) { }
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace TopNotify.Daemon
                 var command = $"reg query HKCU\\AppEvents\\Schemes\\Apps\\.Default\\Notification.Default\\.Current /t REG_SZ /ve";
                 return Util.SimpleCMD(command)?.Contains("TopNotify") ?? false;
             }
-            catch (Exception ex) { }
+            catch (Exception) { }
 
             return false;
         }
@@ -82,7 +82,7 @@ namespace TopNotify.Daemon
         {
             if (!Directory.Exists(Path.GetDirectoryName(GetCopiedSoundPath(FAKE_SOUND))))
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(GetCopiedSoundPath(FAKE_SOUND)));
+                Directory.CreateDirectory(Path.GetDirectoryName(GetCopiedSoundPath(FAKE_SOUND))!);
             }
 
             if (!File.Exists(GetCopiedSoundPath(FAKE_SOUND)))
@@ -120,7 +120,7 @@ namespace TopNotify.Daemon
                     fileSecurity.AddAccessRule(new FileSystemAccessRule("ALL APPLICATION PACKAGES", FileSystemRights.ReadAndExecute, iFlags, pFlags, AccessControlType.Allow));
                     fileInfo.SetAccessControl(fileSecurity);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
 
                 }

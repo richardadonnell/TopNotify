@@ -1,6 +1,8 @@
 ﻿//This File Is From https://github.com/sonicmouse/ProcCmdLine/blob/master/ManagedProcessCommandLine/ProcessCommandLine.cs
 //Huge Thanks To sonicmouse For Providing This Useful File
 
+#nullable disable
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

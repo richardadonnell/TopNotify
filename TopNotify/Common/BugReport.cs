@@ -17,7 +17,7 @@ namespace TopNotify.Common
         {
             var report = Strings.BugReportHeader + "\n\n\n";
 
-            var nativeInterceptor = InterceptorManager.Instance.Interceptors.Where((t) => t.GetType() == typeof(NativeInterceptor)).First() as NativeInterceptor;
+            var nativeInterceptor = (InterceptorManager.Instance.Interceptors.Where((t) => t.GetType() == typeof(NativeInterceptor)).First() as NativeInterceptor)!;
 
             report += $"\n----------- Start Bug Report -----------\n";
             report += $"TopNotify Version: {MainCommands.GetVersion()}\n";

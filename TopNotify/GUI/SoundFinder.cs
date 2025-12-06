@@ -25,16 +25,19 @@ namespace TopNotify.GUI
             var soundPacks = JsonConvert.DeserializeObject<List<ExpandoObject>>(jsonFile);
 
             // Inject Files From Music Folder Into The JSON File
-            dynamic packToInject = soundPacks.Where((dynamic pack) => pack.ID == "custom_sound_path").FirstOrDefault();
+            dynamic? packToInject = soundPacks?.Where((dynamic pack) => pack.ID == "custom_sound_path").FirstOrDefault();
             var wavFiles = GetImportedWAVFiles();
 
-            foreach (var wavFile in wavFiles)
+            if (packToInject != null)
             {
-                dynamic soundToInject = new ExpandoObject();
-                soundToInject.Path = "custom_sound_path/" + wavFile;
-                soundToInject.Name = Path.GetFileNameWithoutExtension(wavFile);
-                soundToInject.Icon = "/Image/Sound.svg";
-                packToInject.Sounds.Add(soundToInject);
+                foreach (var wavFile in wavFiles)
+                {
+                    dynamic soundToInject = new ExpandoObject();
+                    soundToInject.Path = "custom_sound_path/" + wavFile;
+                    soundToInject.Name = Path.GetFileNameWithoutExtension(wavFile);
+                    soundToInject.Icon = "/Image/Sound.svg";
+                    packToInject.Sounds.Add(soundToInject);
+                }
             }
 
             // Send To GUI
