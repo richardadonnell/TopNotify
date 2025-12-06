@@ -87,15 +87,19 @@ namespace TopNotify.GUI
         //Quick And Dirty Method Of Loading WinForms Dependencies
         private static Assembly? FindAssembly(object? sender, ResolveEventArgs args)
         {
-
+            // Hardcoded paths are intentional: We specifically need .NET Framework assemblies
+            // for WinForms tray icon functionality on Windows.
+#pragma warning disable S1075 // URIs should not be hardcoded
             if (args.Name.StartsWith("Accessibility"))
             {
-                // Hardcoded path is intentional: We specifically need .NET Framework Accessibility
-                // for WinForms tray icon functionality on Windows.
-#pragma warning disable S1075 // URIs should not be hardcoded
                 return Assembly.LoadFile(@"C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Accessibility.dll");
-#pragma warning restore S1075
             }
+
+            if (args.Name.StartsWith("System.Drawing.Common") || args.Name.StartsWith("System.Drawing,"))
+            {
+                return Assembly.LoadFile(@"C:\Windows\Microsoft.NET\Framework64\v4.0.30319\System.Drawing.dll");
+            }
+#pragma warning restore S1075
 
             return null;
         }

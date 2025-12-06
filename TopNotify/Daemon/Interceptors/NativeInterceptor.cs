@@ -22,10 +22,10 @@ namespace TopNotify.Daemon
         #region WinAPI Methods
 
         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-        private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+        private static extern IntPtr FindWindow(string? lpClassName, string? lpWindowName);
 
         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-        private static extern IntPtr FindWindowEx(IntPtr parentHandle, IntPtr hWndChildAfter, string className, string windowTitle);
+        private static extern IntPtr FindWindowEx(IntPtr parentHandle, IntPtr hWndChildAfter, string? className, string? windowTitle);
 
         [DllImport("user32.dll")]
         private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
