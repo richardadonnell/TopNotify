@@ -161,6 +161,11 @@ namespace TopNotify.Common
             }
             catch (Exception)
             {
+                // Settings save failures are intentionally ignored:
+                // - File may be temporarily locked by another process
+                // - Disk may be full or have permission issues
+                // The daemon/GUI will continue using in-memory settings
+                // and retry saving on the next user action.
             }
         }
 

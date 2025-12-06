@@ -8,9 +8,10 @@ using TopNotify.Resources;
 
 namespace TopNotify.Daemon
 {
-    public class DaemonErrorHandler
+    public static class DaemonErrorHandler
     {
-        public static List<DaemonError> Errors = new List<DaemonError>();
+        private static readonly List<DaemonError> _errors = new List<DaemonError>();
+        public static List<DaemonError> Errors => _errors;
 
         /// <summary>
         /// Displays An Error To The User Without Closing TopNotify

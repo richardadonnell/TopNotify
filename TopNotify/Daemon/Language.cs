@@ -10,13 +10,13 @@ using TopNotify.Common;
 
 namespace TopNotify.Daemon
 {
-    public class Language
+    public static class Language
     {
         /// <summary>
         /// The Name "New notification" Is Different In Every Language
         /// Therefore, To Grab The Notification Window, We Need To Know The Language
         /// </summary>
-        public static string NotificationName
+        public static string? NotificationName
         {
             get
             {
@@ -48,6 +48,6 @@ namespace TopNotify.Daemon
             }
         }
 
-        static string _NotificationName = null!;
+        static string? _NotificationName = null;
     }
 }

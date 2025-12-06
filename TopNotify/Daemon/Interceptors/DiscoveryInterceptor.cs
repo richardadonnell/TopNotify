@@ -17,7 +17,7 @@ namespace TopNotify.Daemon
             // Store The App's Info, So That In The Future It Can Be Used To Create An AppReference
             var appInfo = notification.AppInfo;
             var appReferences = Settings.AppReferences;
-            var alreadyHasAppReference = appReferences.Where((r) => r.ID == appInfo.DisplayInfo.DisplayName).Any();
+            var alreadyHasAppReference = appReferences.Any((r) => r.ID == appInfo.DisplayInfo.DisplayName);
 
             if (!alreadyHasAppReference)
             {

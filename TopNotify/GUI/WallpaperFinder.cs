@@ -11,8 +11,14 @@ using WatsonWebserver.Core;
 
 namespace TopNotify.GUI
 {
-    internal class WallpaperFinder
+    internal static class WallpaperFinder
     {
+        // Hardcoded path is intentional: This is a workaround for UWP file system virtualization.
+        // The UWP runtime won't let us read from AppData, so we copy the wallpaper to Public Downloads.
+#pragma warning disable S1075 // URIs should not be hardcoded
+        private const string CopiedWallpaperPath = @"C:\Users\Public\Downloads\topnotify_tempwallpaper.jpg";
+#pragma warning restore S1075
+
         public static async Task WallpaperRoute(HttpContextBase ctx)
         {
             if (
@@ -22,7 +28,7 @@ namespace TopNotify.GUI
             {
 
                 // Send The Current Wallpaper
-                var wallpaperFile = CopyWallpaper()!; 
+                var wallpaperFile = CopyWallpaper()!;
 
                 var fileStream = new FileStream(wallpaperFile, FileMode.Open, FileAccess.Read);
 
@@ -47,25 +53,21 @@ namespace TopNotify.GUI
             //The UWP Runtime Won't Let Us Read From AppData
             //So Call CMD To Copy It Into A Location That We Can Access
 
-            var copiedWallpaperPath = "C:\\Users\\Public\\Downloads\\topnotify_tempwallpaper.jpg";
-
-            if (File.Exists(copiedWallpaperPath))
+            if (File.Exists(CopiedWallpaperPath))
             {
-                return copiedWallpaperPath;
+                return CopiedWallpaperPath;
             }
 
-            Util.SimpleCMD("copy /b/v/y \"%APPDATA%\\Microsoft\\Windows\\Themes\\TranscodedWallpaper\" \"C:\\Users\\Public\\Downloads\\topnotify_tempwallpaper.jpg\"");
+            Util.SimpleCMD($"copy /b/v/y \"%APPDATA%\\Microsoft\\Windows\\Themes\\TranscodedWallpaper\" \"{CopiedWallpaperPath}\"");
 
-            return File.Exists(copiedWallpaperPath) ? copiedWallpaperPath : null;
+            return File.Exists(CopiedWallpaperPath) ? CopiedWallpaperPath : null;
         }
 
         public static void CleanUp()
         {
-            var copiedWallpaperPath = "C:\\Users\\Public\\Downloads\\topnotify_tempwallpaper.jpg";
-
-            if (File.Exists(copiedWallpaperPath))
+            if (File.Exists(CopiedWallpaperPath))
             {
-                File.Delete(copiedWallpaperPath);
+                File.Delete(CopiedWallpaperPath);
             }
         }
     }

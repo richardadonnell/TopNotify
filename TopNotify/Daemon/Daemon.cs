@@ -14,13 +14,13 @@ namespace TopNotify.Daemon
 {
     public class Daemon
     {
-        public static Daemon? Instance;
+        public static Daemon? Instance { get; private set; }
 
         /// <summary>
         /// The InterceptorManager instance. May be null until background initialization completes.
         /// Prefer using InterceptorManager.Instance for access after initialization.
         /// </summary>
-        public InterceptorManager? Manager;
+        public InterceptorManager? Manager { get; private set; }
 
         public Daemon() {
             Instance = this;
@@ -38,7 +38,7 @@ namespace TopNotify.Daemon
         /// <summary>
         /// Listens for messages that affect the app lifecycle
         /// </summary>
-        async Task MailSlotListener()
+        static async Task MailSlotListener()
         {
             var listener = new AsyncMailSlotListener("samsidparty_topnotify", Encoding.ASCII.GetBytes("\n")[0]);
             await foreach (var msgBytes in listener.GetNextMessage())
@@ -59,14 +59,18 @@ namespace TopNotify.Daemon
         {
             try
             {
-                var buffer = new byte[1024];
                 using (var client = MailSlot.CreateClient("samsidparty_topnotify"))
                 {
                     var bytes = Encoding.UTF8.GetBytes(message + "\n");
                     client.Write(bytes, 0, bytes.Length);
                 }
             }
-            catch (Exception) { }
+            catch (Exception)
+            {
+                // Intentionally ignored: SendCommandToDaemon is a fire-and-forget operation.
+                // If the daemon isn't running or the mailslot is unavailable, we silently fail
+                // since the caller cannot take corrective action anyway.
+            }
         }
 
         public void CreateManager()

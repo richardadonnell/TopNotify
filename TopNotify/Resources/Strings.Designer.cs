@@ -9,8 +9,8 @@
 
 namespace TopNotify.Resources {
     using System;
-    
-    
+
+
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -18,15 +18,15 @@ namespace TopNotify.Resources {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Strings {
-        
+
         private static global::System.Resources.ResourceManager resourceMan;
-        
+
         private static global::System.Globalization.CultureInfo resourceCulture;
-        
+
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         internal Strings() {
         }
-        
+
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
@@ -40,7 +40,7 @@ namespace TopNotify.Resources {
                 return resourceMan;
             }
         }
-        
+
         /// <summary>
         ///   Overrides the current thread's CurrentUICulture property for all
         ///   resource lookups using this strongly typed resource class.
@@ -54,7 +54,7 @@ namespace TopNotify.Resources {
                 resourceCulture = value;
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Please paste the below text into a GitHub issue (https://github.com/SamsidParty/TopNotify/issues).
         /// </summary>
@@ -63,7 +63,7 @@ namespace TopNotify.Resources {
                 return ResourceManager.GetString("BugReportHeader", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Something Went Wrong.
         /// </summary>
@@ -72,7 +72,7 @@ namespace TopNotify.Resources {
                 return ResourceManager.GetString("ErrorTitle", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Something Went Wrong With TopNotify.
         /// </summary>
@@ -81,7 +81,7 @@ namespace TopNotify.Resources {
                 return ResourceManager.GetString("GenericError", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to This Is A Test Notification.
         /// </summary>
@@ -90,7 +90,7 @@ namespace TopNotify.Resources {
                 return ResourceManager.GetString("TestNotificationBody", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Test Notification.
         /// </summary>
@@ -99,7 +99,7 @@ namespace TopNotify.Resources {
                 return ResourceManager.GetString("TestNotificationTitle", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to SamsidParty TopNotify.
         /// </summary>
@@ -108,7 +108,7 @@ namespace TopNotify.Resources {
                 return ResourceManager.GetString("TrayIconTooltip", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Create Bug Report.
         /// </summary>
@@ -117,7 +117,7 @@ namespace TopNotify.Resources {
                 return ResourceManager.GetString("TrayMenuBugReport", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Quit TopNotify.
         /// </summary>

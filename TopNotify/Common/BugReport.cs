@@ -11,7 +11,7 @@ using TopNotify.Resources;
 
 namespace TopNotify.Common
 {
-    public class BugReport
+    public static class BugReport
     {
         public static string CreateBugReport()
         {
@@ -43,7 +43,7 @@ namespace TopNotify.Common
         {
             new Thread(() =>
             {
-                var tempPath = Path.GetTempFileName();
+                var tempPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
                 File.WriteAllText(tempPath, report);
                 Util.SimpleCMD($"notepad.exe \"{tempPath}\"");
                 File.Delete(tempPath);

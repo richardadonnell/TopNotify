@@ -19,7 +19,7 @@ namespace TopNotify.Common
             public const uint PROCESS_BASIC_INFORMATION = 0;
 
             [Flags]
-            public enum OpenProcessDesiredAccessFlags : uint
+            public enum OpenProcessDesiredAccess : uint
             {
                 PROCESS_VM_READ = 0x0010,
                 PROCESS_QUERY_INFORMATION = 0x0400,
@@ -49,7 +49,7 @@ namespace TopNotify.Common
             // Actual struct definition:
             // https://docs.microsoft.com/en-us/windows/win32/api/winternl/ns-winternl-peb
             [StructLayout(LayoutKind.Sequential)]
-            public struct PEB
+            public struct Peb
             {
                 [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
                 public IntPtr[] Reserved;
@@ -85,7 +85,7 @@ namespace TopNotify.Common
 
             [DllImport("kernel32.dll")]
             public static extern IntPtr OpenProcess(
-                OpenProcessDesiredAccessFlags dwDesiredAccess,
+                OpenProcessDesiredAccess dwDesiredAccess,
                 [MarshalAs(UnmanagedType.Bool)] bool bInheritHandle,
                 uint dwProcessId);
 
@@ -147,108 +147,102 @@ namespace TopNotify.Common
 
         public static int Retrieve(Process process, out string parameterValue, Parameter parameter = Parameter.CommandLine)
         {
-            int rc = 0;
             parameterValue = null;
-            var hProcess = Win32Native.OpenProcess(
-                Win32Native.OpenProcessDesiredAccessFlags.PROCESS_QUERY_INFORMATION |
-                Win32Native.OpenProcessDesiredAccessFlags.PROCESS_VM_READ, false, (uint)process.Id);
-            if (hProcess != IntPtr.Zero)
-            {
-                try
-                {
-                    var sizePBI = Marshal.SizeOf<Win32Native.ProcessBasicInformation>();
-                    var memPBI = Marshal.AllocHGlobal(sizePBI);
-                    try
-                    {
-                        var ret = Win32Native.NtQueryInformationProcess(
-                            hProcess, Win32Native.PROCESS_BASIC_INFORMATION, memPBI,
-                            (uint)sizePBI, out var len);
-                        if (0 == ret)
-                        {
-                            var pbiInfo = Marshal.PtrToStructure<Win32Native.ProcessBasicInformation>(memPBI);
-                            if (pbiInfo.PebBaseAddress != IntPtr.Zero)
-                            {
-                                if (ReadStructFromProcessMemory<Win32Native.PEB>(hProcess,
-                                    pbiInfo.PebBaseAddress, out var pebInfo))
-                                {
-                                    if (ReadStructFromProcessMemory<Win32Native.RtlUserProcessParameters>(
-                                        hProcess, pebInfo.ProcessParameters, out var ruppInfo))
-                                    {
-                                        string ReadUnicodeString(Win32Native.UnicodeString unicodeString)
-                                        {
-                                            var clLen = unicodeString.MaximumLength;
-                                            var memCL = Marshal.AllocHGlobal(clLen);
-                                            try
-                                            {
-                                                if (Win32Native.ReadProcessMemory(hProcess,
-                                                    unicodeString.Buffer, memCL, clLen, out len))
-                                                {
-                                                    rc = 0;
-                                                    return Marshal.PtrToStringUni(memCL);
-                                                }
-                                                else
-                                                {
-                                                    // couldn't read parameter line buffer
-                                                    rc = -6;
-                                                }
-                                            }
-                                            finally
-                                            {
-                                                Marshal.FreeHGlobal(memCL);
-                                            }
-                                            return null;
-                                        }
 
-                                        switch (parameter)
-                                        {
-                                            case Parameter.CommandLine:
-                                                parameterValue = ReadUnicodeString(ruppInfo.CommandLine);
-                                                break;
-                                            case Parameter.WorkingDirectory:
-                                                parameterValue = ReadUnicodeString(ruppInfo.CurrentDirectory);
-                                                break;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        // couldn't read ProcessParameters
-                                        rc = -5;
-                                    }
-                                }
-                                else
-                                {
-                                    // couldn't read PEB information
-                                    rc = -4;
-                                }
-                            }
-                            else
-                            {
-                                // PebBaseAddress is null
-                                rc = -3;
-                            }
-                        }
-                        else
-                        {
-                            // NtQueryInformationProcess failed
-                            rc = -2;
-                        }
-                    }
-                    finally
-                    {
-                        Marshal.FreeHGlobal(memPBI);
-                    }
-                }
-                finally
-                {
-                    Win32Native.CloseHandle(hProcess);
-                }
-            }
-            else
+            var hProcess = Win32Native.OpenProcess(
+                Win32Native.OpenProcessDesiredAccess.PROCESS_QUERY_INFORMATION |
+                Win32Native.OpenProcessDesiredAccess.PROCESS_VM_READ, false, (uint)process.Id);
+
+            if (hProcess == IntPtr.Zero)
             {
-                // couldn't open process for VM read
-                rc = -1;
+                return -1; // couldn't open process for VM read
             }
-            return rc;
+
+            try
+            {
+                return RetrieveFromProcess(hProcess, out parameterValue, parameter);
+            }
+            finally
+            {
+                Win32Native.CloseHandle(hProcess);
+            }
+        }
+
+        private static int RetrieveFromProcess(IntPtr hProcess, out string parameterValue, Parameter parameter)
+        {
+            parameterValue = null;
+
+            var sizePBI = Marshal.SizeOf<Win32Native.ProcessBasicInformation>();
+            var memPBI = Marshal.AllocHGlobal(sizePBI);
+            try
+            {
+                var ret = Win32Native.NtQueryInformationProcess(
+                    hProcess, Win32Native.PROCESS_BASIC_INFORMATION, memPBI,
+                    (uint)sizePBI, out _);
+
+                if (ret != 0)
+                {
+                    return -2; // NtQueryInformationProcess failed
+                }
+
+                var pbiInfo = Marshal.PtrToStructure<Win32Native.ProcessBasicInformation>(memPBI);
+                if (pbiInfo.PebBaseAddress == IntPtr.Zero)
+                {
+                    return -3; // PebBaseAddress is null
+                }
+
+                return RetrieveFromPeb(hProcess, pbiInfo.PebBaseAddress, out parameterValue, parameter);
+            }
+            finally
+            {
+                Marshal.FreeHGlobal(memPBI);
+            }
+        }
+
+        private static int RetrieveFromPeb(IntPtr hProcess, IntPtr pebBaseAddress, out string parameterValue, Parameter parameter)
+        {
+            parameterValue = null;
+
+            if (!ReadStructFromProcessMemory<Win32Native.Peb>(hProcess, pebBaseAddress, out var pebInfo))
+            {
+                return -4; // couldn't read PEB information
+            }
+
+            if (!ReadStructFromProcessMemory<Win32Native.RtlUserProcessParameters>(
+                hProcess, pebInfo.ProcessParameters, out var ruppInfo))
+            {
+                return -5; // couldn't read ProcessParameters
+            }
+
+            var unicodeString = parameter switch
+            {
+                Parameter.CommandLine => ruppInfo.CommandLine,
+                Parameter.WorkingDirectory => ruppInfo.CurrentDirectory,
+                _ => ruppInfo.CommandLine
+            };
+
+            return ReadUnicodeString(hProcess, unicodeString, out parameterValue);
+        }
+
+        private static int ReadUnicodeString(IntPtr hProcess, Win32Native.UnicodeString unicodeString, out string value)
+        {
+            value = null;
+            var clLen = unicodeString.MaximumLength;
+            var memCL = Marshal.AllocHGlobal(clLen);
+            try
+            {
+                if (!Win32Native.ReadProcessMemory(hProcess, unicodeString.Buffer, memCL, clLen, out _))
+                {
+                    return -6; // couldn't read parameter line buffer
+                }
+
+                value = Marshal.PtrToStringUni(memCL);
+                return 0; // Success
+            }
+            finally
+            {
+                Marshal.FreeHGlobal(memCL);
+            }
         }
 
         public static IReadOnlyList<string> CommandLineToArgs(string commandLine)

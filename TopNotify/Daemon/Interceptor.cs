@@ -10,8 +10,8 @@ namespace TopNotify.Daemon
 {
     public class Interceptor
     {
-        public Settings Settings { get { return InterceptorManager.Instance.CurrentSettings; } }
-          
+        public static Settings Settings { get { return InterceptorManager.Instance.CurrentSettings; } }
+
 
         public virtual void Restart() { }
 

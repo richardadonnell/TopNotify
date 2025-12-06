@@ -49,15 +49,7 @@ namespace TopNotify.Common
         /// </summary>
         public static bool IsAppInstalled(AppDiscovery[] discoveries)
         {
-            foreach (var discovery in discoveries)
-            {
-                if (IsAppInstalled(discovery))
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return discoveries.Any(IsAppInstalled);
         }
 
         /// <summary>
@@ -70,14 +62,7 @@ namespace TopNotify.Common
             if (discovery.Method == AppDiscoveryMethod.MatchAlways) { return true; }
             else if (discovery.Method == AppDiscoveryMethod.MatchMSIX) 
             {
-                foreach (var getAppxPackageLine in AppxPackageLines)
-                {
-                    // Check If The Line Contains The Package Name
-                    if (getAppxPackageLine.Contains(discovery.SearchTerm))
-                    {
-                        return true;
-                    }
-                }
+                return AppxPackageLines.Any(line => line.Contains(discovery.SearchTerm));
             }
             else if (discovery.Method == AppDiscoveryMethod.MatchCustomPath)
             {

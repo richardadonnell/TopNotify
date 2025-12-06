@@ -13,16 +13,16 @@ namespace SamsidParty_TopNotify.Daemon
         #region WinAPI
 
         [DllImport("user32.dll")]
-        public static extern int SetWindowLongPtr(IntPtr hWnd, int nIndex, IntPtr dwNewLong);
+        private static extern int SetWindowLongPtr(IntPtr hWnd, int nIndex, IntPtr dwNewLong);
 
         [DllImport("user32.dll")]
-        public static extern IntPtr GetWindowLongPtr(IntPtr hWnd, int nIndex);
+        private static extern IntPtr GetWindowLongPtr(IntPtr hWnd, int nIndex);
 
         [DllImport("user32.dll")]
-        public static extern bool SetLayeredWindowAttributes(IntPtr hwnd, uint crKey, byte bAlpha, uint dwFlags);
+        private static extern bool SetLayeredWindowAttributes(IntPtr hwnd, uint crKey, byte bAlpha, uint dwFlags);
 
         [DllImport("user32.dll")]
-        public static extern short GetKeyState(int nVirtKey);
+        private static extern short GetKeyState(int nVirtKey);
 
         public static bool AltKeyDown => ((GetKeyState(0x12) & 0x8000) > 0);
 
@@ -37,10 +37,10 @@ namespace SamsidParty_TopNotify.Daemon
 
         #endregion
 
-        public List<IntPtr> Styles = new List<IntPtr>();
-        public IntPtr BaseStyle = IntPtr.Zero;
-        public IntPtr LastHandle = IntPtr.Zero;
-        public IntPtr LastStyle = IntPtr.Zero;
+        public List<IntPtr> Styles { get; set; } = new List<IntPtr>();
+        public IntPtr BaseStyle { get; set; } = IntPtr.Zero;
+        public IntPtr LastHandle { get; set; } = IntPtr.Zero;
+        public IntPtr LastStyle { get; set; } = IntPtr.Zero;
 
         public ExtendedStyleManager(IntPtr baseStyle)
         {

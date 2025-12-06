@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace TopNotify.Common
 {
-    public class Util
+    public static class Util
     {
 
         /// <summary>

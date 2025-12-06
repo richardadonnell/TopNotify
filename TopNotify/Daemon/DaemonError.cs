@@ -10,11 +10,11 @@ namespace TopNotify.Daemon
     [Serializable]
     public class DaemonError
     {
-        public string ID = "generic_error";
-        public string Text = Strings.GenericError;
+        public string ID;
+        public string Text;
 
-        public DaemonError(string id, string text) 
-        { 
+        public DaemonError(string id, string text)
+        {
             this.ID = id;
             this.Text = text;
         }

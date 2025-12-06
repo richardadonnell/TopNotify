@@ -16,7 +16,7 @@ using Windows.ApplicationModel.Store;
 
 namespace TopNotify.GUI
 {
-    public class MainCommands
+    public static class MainCommands
     {
         static bool isSaving = false;
 
@@ -42,7 +42,7 @@ namespace TopNotify.GUI
         }
 
         [Command("Donate")]
-        public static async void Donate()
+        public static async Task Donate()
         {
             try
             {

@@ -27,7 +27,19 @@ namespace TopNotify.Daemon
         internal static extern IntPtr MonitorFromPoint([In] Point pt, [In] uint dwFlags);
 
         [DllImport("user32.dll")]
-        public static extern bool GetMonitorInfo(IntPtr hMonitor, [In, Out] MonitorInfo lpmi);
+        private static extern bool GetMonitorInfoNative(IntPtr hMonitor, [In, Out] MonitorInfo lpmi);
+
+        /// <summary>
+        /// Public wrapper for the native GetMonitorInfo P/Invoke.
+        /// </summary>
+        public static bool GetMonitorInfo(IntPtr hMonitor, MonitorInfo lpmi)
+        {
+            if (hMonitor == IntPtr.Zero || lpmi == null)
+            {
+                return false;
+            }
+            return GetMonitorInfoNative(hMonitor, lpmi);
+        }
 
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
         static extern bool EnumDisplayDevices(string lpDevice, uint iDevNum, ref DisplayDevice lpDisplayDevice, uint dwFlags);

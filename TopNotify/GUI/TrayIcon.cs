@@ -14,10 +14,10 @@ namespace TopNotify.GUI
     /// <summary>
     /// This class makes heavy use of reflection because winforms isnt actually referenced in the project.
     /// </summary>
-    public class TrayIcon
+    public static class TrayIcon
     {
-        public static Assembly WinForms = null!;
-        public static dynamic? Application = null;
+        public static Assembly WinForms { get; set; } = null!;
+        public static dynamic? Application { get; set; } = null;
 
 
         /// <summary>
@@ -25,7 +25,14 @@ namespace TopNotify.GUI
         /// </summary>
         public static void Setup()
         {
+            // Hardcoded path is intentional: We specifically need .NET Framework WinForms
+            // (not .NET Core WinForms) for tray icon functionality on Windows.
+            // LoadFile is intentional: We need to load from a specific path, not by assembly name.
+#pragma warning disable S1075 // URIs should not be hardcoded
+#pragma warning disable S3885 // Use Assembly.Load instead of LoadFile
             WinForms = Assembly.LoadFile(@"C:\Windows\Microsoft.NET\Framework64\v4.0.30319\System.Windows.Forms.dll");
+#pragma warning restore S3885
+#pragma warning restore S1075
 
             AppDomain.CurrentDomain.AssemblyResolve += FindAssembly;
 
@@ -39,23 +46,30 @@ namespace TopNotify.GUI
                 if (type.Name == "Application")
                 {
                     Application = type.GetMethods()
-                        .Where((method) => method.Name == "Run" && method.IsStatic && method.GetParameters().Length == 0)
-                        .FirstOrDefault();
+                        .FirstOrDefault(method => method.Name == "Run" && method.IsStatic && method.GetParameters().Length == 0);
                 }
                 else if (type.Name == "NotifyIcon")
                 {
-                    // notify = new NotifyIcon();
                     notify = Activator.CreateInstance(type);
                 }
                 else if (type.Name == "ContextMenuStrip")
                 {
-                    // menuStrip = new ContextMenuStrip();
                     menuStrip = Activator.CreateInstance(type);
                 }
                 else if (type.Name == "ToolStripItemClickedEventHandler")
                 {
-                    // handler = new ToolStripItemClickedEventHandler(Quit);
-                    handler = Delegate.CreateDelegate(type, typeof(TrayIcon).GetMethod(nameof(OnTrayButtonClicked))!);
+                    var onTrayButtonClickedMethod = typeof(TrayIcon).GetMethod(
+                        nameof(OnTrayButtonClicked),
+                        BindingFlags.Public | BindingFlags.Static);
+
+                    if (onTrayButtonClickedMethod == null)
+                    {
+                        throw new InvalidOperationException(
+                            $"Failed to find method '{nameof(OnTrayButtonClicked)}' on type '{nameof(TrayIcon)}'. " +
+                            "Ensure the method exists and is public static.");
+                    }
+
+                    handler = Delegate.CreateDelegate(type, onTrayButtonClickedMethod);
                 }
             }
 
@@ -76,8 +90,12 @@ namespace TopNotify.GUI
 
             if (args.Name.StartsWith("Accessibility"))
             {
+                // Hardcoded path is intentional: We specifically need .NET Framework Accessibility
+                // for WinForms tray icon functionality on Windows.
+#pragma warning disable S1075 // URIs should not be hardcoded
                 return Assembly.LoadFile(@"C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Accessibility.dll");
-            }            
+#pragma warning restore S1075
+            }
 
             return null;
         }
@@ -90,7 +108,6 @@ namespace TopNotify.GUI
 
         public static void OnTrayButtonClicked(object Sender, EventArgs e)
         {
-            // var item = e.ClickedItem;
             var item = e.GetType().GetProperty("ClickedItem")!.GetValue(e)!;
             var itemText = item.GetType().GetProperty("Text")!.GetValue(item)!.ToString();
 
@@ -101,7 +118,7 @@ namespace TopNotify.GUI
             else if (itemText == Strings.TrayMenuQuit)
             {
                 Quit();
-            }   
+            }
         }
 
         public static void Quit()
@@ -116,7 +133,11 @@ namespace TopNotify.GUI
                     {
                         instance.Kill();
                     }
-                    catch { }
+                    catch
+                    {
+                        // Intentionally ignored: Process may have already exited or we may not
+                        // have permission to kill it. Either way, we're exiting anyway.
+                    }
                 }
             }
 
@@ -132,11 +153,12 @@ namespace TopNotify.GUI
                 var psi = new ProcessStartInfo(exe, "--settings" + (Debugger.IsAttached ? " --debug-process" : "")); // Use Debug Args If Needed
                 psi.UseShellExecute = false;
                 psi.WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory;
-                var proc = Process.Start(psi);
+                Process.Start(psi);
             }
             catch (Exception)
             {
-                
+                // Intentionally ignored: If we can't launch settings mode, there's nothing
+                // the user can do about it from the tray icon context. Silently fail.
             }
         }
 

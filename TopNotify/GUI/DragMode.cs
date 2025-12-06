@@ -15,32 +15,32 @@ using static TopNotify.Daemon.ResolutionFinder;
 
 namespace TopNotify.GUI
 {
-    public class DragModeCommands
+    public static class DragModeCommands
     {
-        public static WebWindow? DragModeWindow = null;
+        public static WebWindow? DragModeWindow { get; set; } = null;
 
         #region WinAPI 
 
         [DllImport("user32.dll")]
-        public static extern bool GetCursorPos(out Point lpPoint);
+        private static extern bool GetCursorPos(out Point lpPoint);
 
         [DllImport("user32.dll", SetLastError = true)]
-        public static extern IntPtr SetWindowPos(IntPtr hWnd, int hWndInsertAfter, int x, int y, int cx, int cy, int wFlags);
+        private static extern IntPtr SetWindowPos(IntPtr hWnd, int hWndInsertAfter, int x, int y, int cx, int cy, int wFlags);
 
         [DllImport("user32.dll")]
-        public static extern int ShowCursor(bool bShow);
+        private static extern int ShowCursor(bool bShow);
 
         [DllImport("user32.dll")]
-        public static extern bool SetCursorPos(int x, int y);
+        private static extern bool SetCursorPos(int x, int y);
 
         [DllImport("user32.dll")]
-        public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
         [DllImport("user32.dll")]
-        public static extern IntPtr SetForegroundWindow(IntPtr hWnd);
+        private static extern IntPtr SetForegroundWindow(IntPtr hWnd);
 
         [DllImport("user32.dll")]
-        public static extern bool GetWindowRect(IntPtr hwnd, ref Rectangle rectangle);
+        private static extern bool GetWindowRect(IntPtr hwnd, ref Rectangle rectangle);
 
         #endregion
 

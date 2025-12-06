@@ -20,19 +20,19 @@ namespace TopNotify.Daemon
 
         #endregion
 
-        public static InterceptorManager Instance = null!;
-        public List<Interceptor> Interceptors = new();
+        public static InterceptorManager Instance { get; set; } = null!;
+        public List<Interceptor> Interceptors { get; set; } = new();
 
-        public Settings CurrentSettings = null!;
+        public Settings CurrentSettings { get; set; } = null!;
 
-        public int TimeSinceReflow = 0;
+        public int TimeSinceReflow { get; set; } = 0;
         public const int ReflowTimeout = 50;
 
-        public ConcurrentDictionary<uint, Action?> CleanUpFunctions = new ConcurrentDictionary<uint, Action?>(); // Maps HandledNotifications to the associated clean up function
-        public UserNotificationListener Listener = null!;
-        public bool CanListenToNotifications = false;
+        public ConcurrentDictionary<uint, Action?> CleanUpFunctions { get; } = new ConcurrentDictionary<uint, Action?>(); // Maps HandledNotifications to the associated clean up function
+        public UserNotificationListener Listener { get; set; } = null!;
+        public bool CanListenToNotifications { get; set; } = false;
 
-        public static Interceptor[] InstalledInterceptors =
+        public static Interceptor[] InstalledInterceptors { get; } =
         {
             new NativeInterceptor(),
             new DiscoveryInterceptor(),
@@ -45,14 +45,7 @@ namespace TopNotify.Daemon
             Instance = this;
             CurrentSettings = Settings.Get();
 
-            foreach (var possibleInterceptor in InstalledInterceptors)
-            {
-                // Check If It's Eligible To Be Enabled
-                if (possibleInterceptor.ShouldEnable())
-                {
-                    Interceptors.Add(possibleInterceptor);
-                }
-            }
+            Interceptors.AddRange(InstalledInterceptors.Where(i => i.ShouldEnable()));
 
             Listener = UserNotificationListener.Current;
             Task.Run(async () =>
@@ -93,6 +86,10 @@ namespace TopNotify.Daemon
             MainLoop();
         }
 
+        /// <summary>
+        /// Daemon main loop - intentionally runs indefinitely until process termination.
+        /// </summary>
+#pragma warning disable S2190 // Loops and recursions should not be infinite
         public void MainLoop()
         {
             while (true)
@@ -110,6 +107,7 @@ namespace TopNotify.Daemon
                 Thread.Sleep(10);
             }
         }
+#pragma warning restore S2190
 
         public void Reflow()
         {
@@ -119,7 +117,11 @@ namespace TopNotify.Daemon
                 {
                     i.Reflow();
                 }
-                catch (Exception) { }
+                catch (Exception)
+                {
+                    // Intentionally ignored: Individual interceptor failures should not
+                    // affect other interceptors or crash the daemon's main loop.
+                }
             }
         }
 
@@ -131,7 +133,11 @@ namespace TopNotify.Daemon
                 {
                     i.Update();
                 }
-                catch (Exception) { }
+                catch (Exception)
+                {
+                    // Intentionally ignored: Individual interceptor failures should not
+                    // affect other interceptors or crash the daemon's main loop.
+                }
             }
         }
 
@@ -150,7 +156,11 @@ namespace TopNotify.Daemon
                 {
                     i.OnKeyUpdate();
                 }
-                catch (Exception) { }
+                catch (Exception)
+                {
+                    // Intentionally ignored: Individual interceptor failures should not
+                    // affect other interceptors or crash the daemon's main loop.
+                }
             }
         }
 
@@ -158,7 +168,7 @@ namespace TopNotify.Daemon
         public async void OnNotificationChanged(UserNotificationListener sender, UserNotificationChangedEventArgs args)
         {
             var userNotifications = await Listener.GetNotificationsAsync(NotificationKinds.Toast);
-            var userNotification = userNotifications.Where((n) => n.Id == args.UserNotificationId).FirstOrDefault();
+            var userNotification = userNotifications.FirstOrDefault(n => n.Id == args.UserNotificationId);
 
             if (args.ChangeKind == UserNotificationChangedKind.Added && userNotification != null)
             {
@@ -168,7 +178,11 @@ namespace TopNotify.Daemon
                     {
                         i.OnNotification(userNotification);
                     }
-                    catch { }
+                    catch
+                    {
+                        // Intentionally ignored: Individual interceptor failures should not
+                        // affect other interceptors or crash the notification handler.
+                    }
                 }
             }
 
@@ -186,7 +200,11 @@ namespace TopNotify.Daemon
                     i.Restart();
                     i.Reflow();
                 }
-                catch (Exception) { }
+                catch (Exception)
+                {
+                    // Intentionally ignored: Individual interceptor failures should not
+                    // affect other interceptors during settings refresh.
+                }
             }
         }
     }
