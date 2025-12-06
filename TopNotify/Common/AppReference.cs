@@ -67,7 +67,12 @@ namespace TopNotify.Common
             }
 
             // Return The Default AppReference
-            return references.Where((r) => r.ID == "Other").FirstOrDefault()!;
+            var defaultReference = references.FirstOrDefault(r => r.ID == "Other");
+            if (defaultReference == null)
+            {
+                throw new InvalidOperationException("Default AppReference with ID 'Other' was not found in settings. Ensure the 'Other' entry exists in AppReferences.");
+            }
+            return defaultReference;
         }
     }
 }

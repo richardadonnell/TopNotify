@@ -26,7 +26,13 @@ namespace TopNotify.Common
             cmdsi.RedirectStandardOutput = true;
             cmdsi.UseShellExecute = false;
             cmdsi.CreateNoWindow = true;
-            var cmd = Process.Start(cmdsi)!;
+
+            using var cmd = Process.Start(cmdsi);
+            if (cmd == null)
+            {
+                throw new InvalidOperationException($"Failed to start cmd.exe process for command: {cmdString}");
+            }
+
             var output = cmd.StandardOutput.ReadToEnd();
 
             cmd.WaitForExit();
@@ -43,8 +49,8 @@ namespace TopNotify.Common
 
         public static FileResolver GetFileResolver()
         {
-            if (AppManager.Instance?.CurrentServerManager?.Resolver != null) 
-            { 
+            if (AppManager.Instance?.CurrentServerManager?.Resolver != null)
+            {
                 return AppManager.Instance.CurrentServerManager.Resolver;
             }
 

@@ -59,7 +59,23 @@ namespace TopNotify.Common
 
         public static Settings Get()
         {
-            var value = JsonConvert.DeserializeObject<Settings>(GetRaw())!;
+            var rawContent = GetRaw();
+            Settings? value;
+
+            try
+            {
+                value = JsonConvert.DeserializeObject<Settings>(rawContent);
+            }
+            catch (JsonException ex)
+            {
+                throw new InvalidDataException($"Failed to parse settings file at '{GetFilePath()}': {ex.Message}", ex);
+            }
+
+            if (value == null)
+            {
+                throw new InvalidDataException($"Settings file at '{GetFilePath()}' contains invalid or empty JSON content.");
+            }
+
             return value;
         }
 
