@@ -78,11 +78,8 @@ body {
     padding-top: 7px;
     height: 100vh;
     width: 100vw;
-    /* background-image: var(--image-bg) !important; */
-    /* background-size: 120vw !important; */
-    /* background-repeat: no-repeat; */
-    /* image-rendering: pixelated; */
-    background-color: #222222 !important;
+    /* Background images removed for cleaner UI; using solid theme color instead */
+    background-color: var(--col-bg) !important;
 }
 
 
