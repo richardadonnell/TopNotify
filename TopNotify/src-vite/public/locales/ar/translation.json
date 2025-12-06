@@ -1,0 +1,43 @@
+{
+  "app": {
+    "title": "TopNotify",
+    "about": "حول TopNotify",
+    "donate": "تبرع"
+  },
+  "about": {
+    "title": "حول",
+    "developedBy": "طُوّر بواسطة SamsidParty • مدعوم من IgniteView",
+    "officialWebsite": "الموقع الرسمي",
+    "github": "GitHub",
+    "microsoftStore": "Microsoft Store",
+    "leaveReview": "اترك تقييماً",
+    "license": "الترخيص"
+  },
+  "settings": {
+    "enableClickThrough": "تفعيل النقر من خلال",
+    "notificationTransparency": "شفافية الإشعارات",
+    "readNotificationsToMe": "اقرأ لي الإشعارات",
+    "enableCustomSounds": "تفعيل الأصوات المخصصة",
+    "spawnTestNotification": "إنشاء إشعار تجريبي",
+    "primaryMonitor": "الشاشة الرئيسية",
+    "language": "اللغة"
+  },
+  "sounds": {
+    "editNotificationSounds": "تعديل أصوات الإشعارات",
+    "notificationSounds": "أصوات الإشعارات",
+    "soundWarning": "بعض التطبيقات تشغّل أصواتها الخاصة، قد تحتاج إلى إيقافها من داخل التطبيق لمنع تداخل الصوت.",
+    "captureHint": "عندما يرسل تطبيق إشعاراً، سيلتقطه TopNotify وسيظهر هنا لتتمكن من تعديل الأصوات.",
+    "selectSound": "اختر صوتاً",
+    "import": "استيراد"
+  },
+  "debug": {
+    "title": "قائمة التصحيح",
+    "openAppFolder": "فتح مجلد التطبيق",
+    "forceFallbackInterceptor": "فرض المعترض الاحتياطي",
+    "disableBoundsCorrection": "تعطيل تصحيح الحدود"
+  },
+  "drag": {
+    "dragToPosition": "اسحب إلى الموضع المطلوب",
+    "leftClickToConfirm": "انقر بالزر الأيسر للتأكيد"
+  }
+}
