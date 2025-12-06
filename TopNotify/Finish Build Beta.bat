@@ -5,7 +5,7 @@ signtool sign /f "%USERPROFILE%\Documents\Certificates\SamsidParty Private.pfx" 
 cd ..\..\..\
 
 SET F=".\BUILD"
- 
+
 IF EXIST %F% RMDIR /S /Q %F%
 
 c:\windows\system32\xcopy.exe ".\MSIX Beta" .\BUILD /E /H /C /I
