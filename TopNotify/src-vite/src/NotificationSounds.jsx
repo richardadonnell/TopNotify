@@ -18,10 +18,10 @@ import { useTranslation } from "react-i18next";
 export default function ManageNotificationSounds() {
     const { t } = useTranslation();
 
-    const [isOpen, setIsOpenInternal] = useState(false);
-    const [isPickerOpen, setIsPickerOpenInternal] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+    const [isPickerOpen, setIsPickerOpen] = useState(false);
 
-    const setIsOpen = (v) => {
+    const updateIsOpen = (v) => {
 
         if (v && window.rerender < 0) { return; }
 
@@ -32,12 +32,12 @@ export default function ManageNotificationSounds() {
             setTimeout(() => window.setRerender(2), 0);
         }
 
-        setIsOpenInternal(v);
+        setIsOpen(v);
     };
 
-    const setIsPickerOpen = (v) => {
-        setIsOpenInternal(!v);
-        setIsPickerOpenInternal(v);
+    const updateIsPickerOpen = (v) => {
+        setIsOpen(!v);
+        setIsPickerOpen(v);
     };
 
     const applySound = (sound) => {
@@ -51,25 +51,25 @@ export default function ManageNotificationSounds() {
         }
 
         window.UploadConfig();
-        setIsPickerOpen(false);
+        updateIsPickerOpen(false);
     };
 
     return (
         <div className="flexx facenter fillx gap20 buttonContainer">
             <span data-greyed-out={(!window.isInterceptionEnabled).toString()}>{t("sounds.editNotificationSounds")}</span>
-            <Button data-greyed-out={(!window.isInterceptionEnabled).toString()} style={{ marginInlineStart: "auto" }} className="iconButton" onClick={() => setIsOpen(true)}>
+            <Button data-greyed-out={(!window.isInterceptionEnabled).toString()} style={{ marginInlineStart: "auto" }} className="iconButton" onClick={() => updateIsOpen(true)}>
                 <TbPencil/>
             </Button>
             <Drawer
                 blockScrollOnMount={false}
                 isOpen={isOpen}
                 placement='bottom'
-                onClose={() => setIsOpen(false)}
+                onClose={() => updateIsOpen(false)}
             >
                 <DrawerContent>
 
                     <div className="windowCloseButton">
-                        <Button className="iconButton" onClick={() => setIsOpen(false)}><TbChevronDown/></Button>
+                        <Button className="iconButton" onClick={() => updateIsOpen(false)}><TbChevronDown/></Button>
                     </div>
 
                     <DrawerHeader onMouseOver={window.igniteView.dragWindow}>{t("sounds.notificationSounds")}</DrawerHeader>
@@ -77,11 +77,11 @@ export default function ManageNotificationSounds() {
                     <DrawerBody>
                         <div className="errorMessage medium"><TbAlertTriangle/>{t("sounds.soundWarning")}</div>
                         {
-                            window.Config.AppReferences.map((appReference) => {
+                            (Array.isArray(window?.Config?.AppReferences) ? window.Config.AppReferences : []).map((appReference) => {
                                 return (
                                     <Fragment key={appReference.ID}>
                                         <Divider/>
-                                        <AppReferenceSoundItem setIsPickerOpen={setIsPickerOpen} appReference={appReference}></AppReferenceSoundItem>
+                                        <AppReferenceSoundItem setIsPickerOpen={updateIsPickerOpen} appReference={appReference}></AppReferenceSoundItem>
                                     </Fragment>
                                 );
                             })
@@ -95,7 +95,7 @@ export default function ManageNotificationSounds() {
                     </DrawerFooter>
                 </DrawerContent>
             </Drawer>
-            <SoundPicker applySound={applySound} setIsPickerOpen={setIsPickerOpen} key={window.soundPickerReferenceID + isPickerOpen || "soundPicker"} isOpen={isPickerOpen}></SoundPicker>
+            <SoundPicker applySound={applySound} setIsPickerOpen={updateIsPickerOpen} key={window.soundPickerReferenceID + isPickerOpen || "soundPicker"} isOpen={isPickerOpen}></SoundPicker>
         </div>
     );
 }

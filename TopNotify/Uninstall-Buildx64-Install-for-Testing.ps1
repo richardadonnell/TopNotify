@@ -1,9 +1,10 @@
 # Find and remove existing TopNotify appx packages
 
-Get-AppxPackage -Name "*TopNotify*" | Select-Object Name, PackageFullName
+$packages = Get-AppxPackage -Name "*TopNotify*"
 
-If ($?) {
-    Get-AppxPackage -Name "*TopNotify*" | Remove-AppxPackage
+If ($packages) {
+    $packages | Select-Object Name, PackageFullName
+    $packages | Remove-AppxPackage
 } Else {
     Write-Host "No existing TopNotify package found."
 }
