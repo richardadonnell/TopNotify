@@ -73,8 +73,25 @@ namespace TopNotify.GUI
                 }
             }
 
+            // Validate that all required WinForms types were found
+            if (notify == null)
+            {
+                throw new InvalidOperationException(
+                    "Required WinForms type 'NotifyIcon' not found in System.Windows.Forms assembly.");
+            }
+            if (menuStrip == null)
+            {
+                throw new InvalidOperationException(
+                    "Required WinForms type 'ContextMenuStrip' not found in System.Windows.Forms assembly.");
+            }
+            if (handler == null)
+            {
+                throw new InvalidOperationException(
+                    "Required WinForms type 'ToolStripItemClickedEventHandler' not found in System.Windows.Forms assembly.");
+            }
+
             //Use WinForms Methods To Create A Tray Icon
-            notify!.Visible = true;
+            notify.Visible = true;
             notify.Icon = Util.FindAppIcon();
             notify.Text = Strings.TrayIconTooltip;
             notify.DoubleClick += new EventHandler(LaunchSettingsMode);
@@ -112,8 +129,18 @@ namespace TopNotify.GUI
 
         public static void OnTrayButtonClicked(object Sender, EventArgs e)
         {
-            var item = e.GetType().GetProperty("ClickedItem")!.GetValue(e)!;
-            var itemText = item.GetType().GetProperty("Text")!.GetValue(item)!.ToString();
+            // Safely extract the clicked item and its text using defensive reflection
+            var clickedItemProperty = e.GetType().GetProperty("ClickedItem");
+            if (clickedItemProperty == null) return;
+
+            var item = clickedItemProperty.GetValue(e);
+            if (item == null) return;
+
+            var textProperty = item.GetType().GetProperty("Text");
+            if (textProperty == null) return;
+
+            var itemText = textProperty.GetValue(item)?.ToString();
+            if (itemText == null) return;
 
             if (itemText == Strings.TrayMenuBugReport)
             {

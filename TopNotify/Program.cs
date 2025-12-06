@@ -21,11 +21,57 @@ namespace TopNotify.Common
     {
         private const string SettingsArg = "--settings";
 
-        public static StoreContext Context { get; set; } = null!;
-        public static Daemon.Daemon Background { get; set; } = null!;
-        public static AppManager GUI { get; set; } = null!;
-        public static IEnumerable<Process> ValidTopNotifyInstances { get; set; } = null!;
-        public static Logger Logger { get; set; } = null!;
+        // Backing fields for guarded properties
+        private static StoreContext? _context;
+        private static Daemon.Daemon? _background;
+        private static AppManager? _gui;
+        private static IEnumerable<Process>? _validTopNotifyInstances;
+        private static Logger? _logger;
+
+        /// <summary>
+        /// Store context for in-app purchases. Only available after GUI initialization.
+        /// </summary>
+        public static StoreContext Context
+        {
+            get => _context ?? throw new InvalidOperationException("StoreContext has not been initialized. This is only available in GUI mode after App() has been called.");
+            set => _context = value;
+        }
+
+        /// <summary>
+        /// Background daemon instance. Only available in daemon mode.
+        /// </summary>
+        public static Daemon.Daemon Background
+        {
+            get => _background ?? throw new InvalidOperationException("Background daemon has not been initialized. This is only available in daemon mode.");
+            set => _background = value;
+        }
+
+        /// <summary>
+        /// GUI app manager instance. Only available in GUI mode.
+        /// </summary>
+        public static AppManager GUI
+        {
+            get => _gui ?? throw new InvalidOperationException("GUI has not been initialized. This is only available in settings mode.");
+            set => _gui = value;
+        }
+
+        /// <summary>
+        /// Collection of other TopNotify process instances.
+        /// </summary>
+        public static IEnumerable<Process> ValidTopNotifyInstances
+        {
+            get => _validTopNotifyInstances ?? throw new InvalidOperationException("ValidTopNotifyInstances has not been initialized. Call Main() first.");
+            set => _validTopNotifyInstances = value;
+        }
+
+        /// <summary>
+        /// Serilog logger instance. Available after logging initialization in Main().
+        /// </summary>
+        public static Logger Logger
+        {
+            get => _logger ?? throw new InvalidOperationException("Logger has not been initialized. Ensure logging is set up before accessing.");
+            set => _logger = value;
+        }
 
         public static bool IsDaemonRunning => ValidTopNotifyInstances.Any((p) => {
             try
@@ -118,7 +164,7 @@ namespace TopNotify.Common
 
                 // Open The GUI App In Settings Mode
                 GUI = new ViteAppManager();
-                _ = App();
+                App().GetAwaiter().GetResult();
             }
             else
             {
@@ -144,7 +190,7 @@ namespace TopNotify.Common
                 WebWindow.Create()
                 .WithTitle("TopNotify")
                 .WithBounds(new LockedWindowBounds((int)(400f * ResolutionFinder.GetScale()), (int)(650f * ResolutionFinder.GetScale())))
-                .With((w) => ((w as Win32WebWindow)!).BackgroundMode = Win32WebWindow.WindowBackgroundMode.Acrylic)
+                .With((w) => { if (w is Win32WebWindow win) win.BackgroundMode = Win32WebWindow.WindowBackgroundMode.Acrylic; })
                 .WithoutTitleBar()
                 .Show();
 
