@@ -39,6 +39,9 @@ namespace TopNotify.GUI
         [DllImport("user32.dll")]
         public static extern IntPtr SetForegroundWindow(IntPtr hWnd);
 
+        [DllImport("user32.dll")]
+        public static extern bool GetWindowRect(IntPtr hwnd, ref Rectangle rectangle);
+
         #endregion
 
         //Called By JavaScript
@@ -106,7 +109,7 @@ namespace TopNotify.GUI
 
                 //Find Position Of Window
                 Rectangle DragRect = new Rectangle();
-                NativeInterceptor.GetWindowRect(hwnd, ref DragRect);
+                GetWindowRect(hwnd, ref DragRect);
 
                 // Find The Bounds Of The Preferred Monitor
                 var hMonitor = ResolutionFinder.GetPreferredDisplay();
