@@ -3,6 +3,7 @@ import {TbAlertTriangle, TbCurrencyDollar, TbInfoCircle, TbX} from "react-icons/
 
 import ClickThrough from "./ClickThrough";
 import { DebugMenu } from "./DebugMenu";
+import LanguageSelector from "./LanguageSelector";
 import ManageNotificationSounds from "./NotificationSounds";
 import MonitorSelect from "./MonitorSelect";
 import NotificationTransparency from "./Transparency";
@@ -91,6 +92,8 @@ function App() {
                 <ClickThrough></ClickThrough>
                 <Divider />
                 <NotificationTransparency></NotificationTransparency>
+                <Divider />
+                <LanguageSelector></LanguageSelector>
             </Container>
 
             <Container>

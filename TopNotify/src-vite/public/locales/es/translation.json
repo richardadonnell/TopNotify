@@ -1,0 +1,43 @@
+{
+  "app": {
+    "title": "TopNotify",
+    "about": "Acerca de TopNotify",
+    "donate": "Donar"
+  },
+  "about": {
+    "title": "Acerca de",
+    "developedBy": "Desarrollado por SamsidParty • Impulsado por IgniteView",
+    "officialWebsite": "Sitio Web Oficial",
+    "github": "GitHub",
+    "microsoftStore": "Microsoft Store",
+    "leaveReview": "Dejar una Reseña",
+    "license": "Licencia"
+  },
+  "settings": {
+    "enableClickThrough": "Habilitar Click-Through",
+    "notificationTransparency": "Transparencia de Notificaciones",
+    "readNotificationsToMe": "Leerme las Notificaciones",
+    "enableCustomSounds": "Habilitar Sonidos Personalizados",
+    "spawnTestNotification": "Generar Notificación de Prueba",
+    "primaryMonitor": "Monitor Principal",
+    "language": "Idioma"
+  },
+  "sounds": {
+    "editNotificationSounds": "Editar Sonidos de Notificación",
+    "notificationSounds": "Sonidos de Notificación",
+    "soundWarning": "Algunas aplicaciones reproducirán sus propios sonidos, es posible que debas desactivarlos en la aplicación para evitar audio superpuesto.",
+    "captureHint": "Cuando una aplicación envía una notificación, TopNotify la capturará y aparecerá aquí para que puedas modificar los sonidos.",
+    "selectSound": "Seleccionar Sonido",
+    "import": "Importar"
+  },
+  "debug": {
+    "title": "Menú de Depuración",
+    "openAppFolder": "Abrir Carpeta de la Aplicación",
+    "forceFallbackInterceptor": "Forzar Interceptor de Respaldo",
+    "disableBoundsCorrection": "Deshabilitar Corrección de Límites"
+  },
+  "drag": {
+    "dragToPosition": "Arrastra a la posición deseada",
+    "leftClickToConfirm": "Clic izquierdo para confirmar"
+  }
+}

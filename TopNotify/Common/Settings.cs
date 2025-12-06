@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Win32;
 using Newtonsoft.Json;
@@ -37,6 +39,9 @@ namespace TopNotify.Common
 
         public string PreferredMonitor = "primary";
 
+        // Language preference: null = auto-detect from system, or explicit language code like "en", "es", "ar"
+        public string? PreferredLanguage = null;
+
         public List<AppReference> AppReferences = new List<AppReference>();
 
         // Dynamic Fields That Are Cached, Useful For Interop
@@ -44,6 +49,7 @@ namespace TopNotify.Common
         public int __ScreenHeight = 0;
         public float __ScreenScale = 1;
         public List<MonitorData> __MonitorData;
+        public string __SystemLanguage = "en"; // Detected system UI language (2-letter code)
 
         // Deprecated Settings
         [Deprecated("Use CustomPositionPercentX Instead", DeprecationType.Deprecate, 241)] public int CustomPositionX = 0; // Deprecated In Favor Of Percentage Units
@@ -151,6 +157,7 @@ namespace TopNotify.Common
             __ScreenHeight = ResolutionFinder.GetRealResolution().Height;
             __ScreenScale = ResolutionFinder.GetScale();
             __MonitorData = ResolutionFinder.GetMonitors();
+            __SystemLanguage = Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName;
         }
 
     }

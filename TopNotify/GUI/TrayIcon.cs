@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TopNotify.Common;
 using TopNotify.Daemon;
+using TopNotify.Resources;
 
 namespace TopNotify.GUI
 {
@@ -61,11 +62,11 @@ namespace TopNotify.GUI
             //Use WinForms Methods To Create A Tray Icon
             notify.Visible = true;
             notify.Icon = Util.FindAppIcon();
-            notify.Text = "SamsidParty TopNotify";
+            notify.Text = Strings.TrayIconTooltip;
             notify.DoubleClick += new EventHandler(LaunchSettingsMode);
             notify.ContextMenuStrip = menuStrip;
-            notify.ContextMenuStrip.Items.Add("Create Bug Report");
-            notify.ContextMenuStrip.Items.Add("Quit TopNotify");
+            notify.ContextMenuStrip.Items.Add(Strings.TrayMenuBugReport);
+            notify.ContextMenuStrip.Items.Add(Strings.TrayMenuQuit);
             notify.ContextMenuStrip.ItemClicked += handler;
         }
 
@@ -93,11 +94,11 @@ namespace TopNotify.GUI
             var item = e.GetType().GetProperty("ClickedItem")!.GetValue(e);
             var itemText = item.GetType().GetProperty("Text")!.GetValue(item).ToString();
 
-            if (itemText == "Create Bug Report")
+            if (itemText == Strings.TrayMenuBugReport)
             {
                 BugReport.DisplayBugReport(BugReport.CreateBugReport());
             }
-            else if (itemText == "Quit TopNotify")
+            else if (itemText == Strings.TrayMenuQuit)
             {
                 Quit();
             }   

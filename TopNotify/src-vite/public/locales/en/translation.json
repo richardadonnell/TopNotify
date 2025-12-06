@@ -19,7 +19,8 @@
     "readNotificationsToMe": "Read Notifications To Me",
     "enableCustomSounds": "Enable Custom Sounds",
     "spawnTestNotification": "Spawn Test Notification",
-    "primaryMonitor": "Primary Monitor"
+    "primaryMonitor": "Primary Monitor",
+    "language": "Language"
   },
   "sounds": {
     "editNotificationSounds": "Edit Notification Sounds",

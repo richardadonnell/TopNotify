@@ -8,6 +8,7 @@ using System.Buffers;
 using System.Reflection;
 using Microsoft.Toolkit.Uwp.Notifications;
 using System.Runtime.InteropServices;
+using TopNotify.Resources;
 
 namespace TopNotify.Common
 {
@@ -18,7 +19,7 @@ namespace TopNotify.Common
 
         public static void SpawnTestNotification()
         {
-            Toast("Test Notification", "This Is A Test Notification");
+            Toast(Strings.TestNotificationTitle, Strings.TestNotificationBody);
         }
 
         public static void Toast(string title, string content)
