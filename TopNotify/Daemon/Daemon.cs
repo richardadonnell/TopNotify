@@ -14,9 +14,9 @@ namespace TopNotify.Daemon
 {
     public class Daemon
     {
-        public static Daemon Instance;
+        public static Daemon Instance = null!;
 
-        public InterceptorManager Manager;
+        public InterceptorManager Manager = null!;
 
         public Daemon() {
             Instance = this;
@@ -62,7 +62,7 @@ namespace TopNotify.Daemon
                     client.Write(bytes, 0, bytes.Length);
                 }
             }
-            catch (Exception ex) { }
+            catch (Exception) { }
         }
 
         public void CreateManager()

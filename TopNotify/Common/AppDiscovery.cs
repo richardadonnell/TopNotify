@@ -24,7 +24,7 @@ namespace TopNotify.Common
         /// <summary>
         /// How This Search Term Is Used Depends On The App Discovery Method
         /// </summary>
-        public string SearchTerm;
+        public required string SearchTerm;
 
         /// <summary>
         /// Cached Output Of Get-AppxPackage, Filtered To Only Include "Name: " Lines
@@ -42,7 +42,7 @@ namespace TopNotify.Common
             }
         }
 
-        private static string[] _AppxPackageLines = null;
+        private static string[]? _AppxPackageLines = null;
 
         /// <summary>
         /// Checks If An App Is Installed Based On Multiple Discovery Parameters

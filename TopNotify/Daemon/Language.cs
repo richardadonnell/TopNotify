@@ -48,6 +48,6 @@ namespace TopNotify.Daemon
             }
         }
 
-        static string _NotificationName;
+        static string _NotificationName = null!;
     }
 }

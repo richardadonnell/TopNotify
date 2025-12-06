@@ -17,7 +17,7 @@ namespace TopNotify.GUI
 {
     public class DragModeCommands
     {
-        public static WebWindow DragModeWindow;
+        public static WebWindow? DragModeWindow = null;
 
         #region WinAPI 
 
@@ -71,7 +71,7 @@ namespace TopNotify.GUI
                 .WithTitle("")
                 .WithoutTitleBar()
                 .WithBounds(windowBounds)
-                .With((w) => (w as Win32WebWindow).BackgroundMode = Win32WebWindow.WindowBackgroundMode.Acrylic)
+                .With((w) => ((w as Win32WebWindow)!).BackgroundMode = Win32WebWindow.WindowBackgroundMode.Acrylic)
                 .Show();
 
             SetForegroundWindow(DragModeWindow.NativeHandle);
@@ -138,7 +138,7 @@ namespace TopNotify.GUI
         public static void DragModeThread()
         {
             Point cursorPos;
-            IntPtr dragModeHandle = DragModeWindow.NativeHandle;
+            IntPtr dragModeHandle = DragModeWindow!.NativeHandle;
 
             while (DragModeWindow != null)
             {

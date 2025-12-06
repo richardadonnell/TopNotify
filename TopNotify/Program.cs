@@ -19,11 +19,11 @@ namespace TopNotify.Common
 {
     public class Program
     {
-        public static StoreContext Context;
-        public static Daemon.Daemon Background;
-        public static AppManager GUI;
-        public static IEnumerable<Process> ValidTopNotifyInstances;
-        public static Logger Logger;
+        public static StoreContext Context = null!;
+        public static Daemon.Daemon Background = null!;
+        public static AppManager GUI = null!;
+        public static IEnumerable<Process> ValidTopNotifyInstances = null!;
+        public static Logger Logger = null!;
 
         public static bool IsDaemonRunning => ValidTopNotifyInstances.Where((p) => {
             try
@@ -78,7 +78,7 @@ namespace TopNotify.Common
             if (!args.Contains("--settings") && isDaemonRunning && !isGUIRunning)
             {
                 //Open GUI Instead Of Daemon
-                TrayIcon.LaunchSettingsMode(null, null);
+                TrayIcon.LaunchSettingsMode(null!, null!);
                 Environment.Exit(1);
             }
             else if (args.Contains("--settings") && isGUIRunning)
@@ -109,7 +109,7 @@ namespace TopNotify.Common
 
                 // Open The GUI App In Settings Mode
                 GUI = new ViteAppManager();
-                App();
+                _ = App();
             }
             else
             {
@@ -135,7 +135,7 @@ namespace TopNotify.Common
                 WebWindow.Create()
                 .WithTitle("TopNotify")
                 .WithBounds(new LockedWindowBounds((int)(400f * ResolutionFinder.GetScale()), (int)(650f * ResolutionFinder.GetScale())))
-                .With((w) => (w as Win32WebWindow).BackgroundMode = Win32WebWindow.WindowBackgroundMode.Acrylic)
+                .With((w) => ((w as Win32WebWindow)!).BackgroundMode = Win32WebWindow.WindowBackgroundMode.Acrylic)
                 .WithoutTitleBar()
                 .Show();
 

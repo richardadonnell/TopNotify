@@ -48,7 +48,7 @@ namespace TopNotify.Common
         public int __ScreenWidth = 0;
         public int __ScreenHeight = 0;
         public float __ScreenScale = 1;
-        public List<MonitorData> __MonitorData;
+        public List<MonitorData> __MonitorData = new List<MonitorData>();
         public string __SystemLanguage = "en"; // Detected system UI language (2-letter code)
 
         // Deprecated Settings
@@ -59,7 +59,7 @@ namespace TopNotify.Common
 
         public static Settings Get()
         {
-            var value = JsonConvert.DeserializeObject<Settings>(GetRaw());
+            var value = JsonConvert.DeserializeObject<Settings>(GetRaw())!;
             return value;
         }
 
@@ -143,7 +143,7 @@ namespace TopNotify.Common
             {
                 File.WriteAllText(Settings.GetFilePath(), newData);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
         }
