@@ -11,14 +11,25 @@ export default function LanguageSelector() {
     const { t, i18n } = useTranslation();
 
     // Handle language change
-    const handleLanguageChange = (e) => {
+    const handleLanguageChange = async (e) => {
         const newLang = e.target.value;
         
         // Change the language in i18next (also saves to localStorage via detection config)
-        i18n.changeLanguage(newLang);
+        try {
+            await i18n.changeLanguage(newLang);
+        } catch (err) {
+            console.error("Failed to change language:", err);
+            return;
+        }
         
         // Also save to C# settings for persistence
-        window.ChangeValue("PreferredLanguage", newLang);
+        if (typeof window.ChangeValue === "function") {
+            try {
+                window.ChangeValue("PreferredLanguage", newLang);
+            } catch (err) {
+                console.error("Failed to save language to C# settings:", err);
+            }
+        }
     };
 
     return (
