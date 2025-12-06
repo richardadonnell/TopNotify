@@ -13,7 +13,7 @@ using TopNotify.Daemon;
 
 namespace TopNotify.GUI
 {
-    public class SoundFinder
+    public static class SoundFinder
     {
         public static string ImportedSoundFolder => Path.Join(Settings.GetAppDataFolder(), "NotificationSounds", "imported");
 
@@ -25,7 +25,7 @@ namespace TopNotify.GUI
             var soundPacks = JsonConvert.DeserializeObject<List<ExpandoObject>>(jsonFile);
 
             // Inject Files From Music Folder Into The JSON File
-            dynamic? packToInject = soundPacks?.Where((dynamic pack) => pack.ID == "custom_sound_path").FirstOrDefault();
+            dynamic? packToInject = soundPacks?.FirstOrDefault((dynamic pack) => pack.ID == "custom_sound_path");
             var wavFiles = GetImportedWAVFiles();
 
             if (packToInject != null)
@@ -55,14 +55,15 @@ namespace TopNotify.GUI
             if (!string.IsNullOrEmpty(soundPath) && File.Exists(soundPath) && Path.GetExtension(soundPath).ToLower() == ".wav")
             {
                 GetImportedWAVFiles(); // Makes sure ImportedSoundFolder exists
-                var soundName = Path.GetFileNameWithoutExtension(soundPath);
+                var soundNameBuilder = new StringBuilder(Path.GetFileNameWithoutExtension(soundPath));
 
                 // Prevent duplicate files
-                while (File.Exists(Path.Join(ImportedSoundFolder, soundName + ".wav")))
+                while (File.Exists(Path.Join(ImportedSoundFolder, soundNameBuilder.ToString() + ".wav")))
                 {
-                    soundName += "_";
+                    soundNameBuilder.Append('_');
                 }
 
+                var soundName = soundNameBuilder.ToString();
                 var copiedSoundPath = Path.Join(ImportedSoundFolder, soundName + ".wav");
                 File.Copy(soundPath, copiedSoundPath, true);
                 return new string[] { "custom_sound_path/" + copiedSoundPath, Path.GetFileNameWithoutExtension(soundPath) };
@@ -101,7 +102,10 @@ namespace TopNotify.GUI
 
                 return importedFiles;
             }
-            catch { }
+            catch
+            {
+                // Intentionally ignored: If we can't read files, return empty array below
+            }
 
             return new string[0];
         }

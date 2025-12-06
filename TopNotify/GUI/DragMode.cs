@@ -19,7 +19,7 @@ namespace TopNotify.GUI
     {
         public static WebWindow? DragModeWindow { get; set; } = null;
 
-        #region WinAPI 
+        #region WinAPI
 
         [DllImport("user32.dll")]
         private static extern bool GetCursorPos(out Point lpPoint);
