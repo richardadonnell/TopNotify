@@ -64,9 +64,22 @@ i18n
         },
         
         // Wait for translations to load before rendering
+        // Note: Requires <Suspense> boundary in React tree (see main.jsx)
         react: {
             useSuspense: true,
         },
+    })
+    .then(() => {
+        console.log("i18next initialized successfully, language:", i18n.resolvedLanguage);
+    })
+    .catch((err) => {
+        console.error("i18next initialization failed:", err);
+        // Force fallback to English on initialization failure
+        i18n.changeLanguage("en").catch(() => {
+            // Last resort: disable suspense to prevent infinite loading
+            i18n.options.react.useSuspense = false;
+            console.error("Failed to fall back to English, suspense disabled");
+        });
     });
 
 export default i18n;
