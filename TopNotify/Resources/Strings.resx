@@ -79,7 +79,7 @@
     <comment>Title for error notification toasts</comment>
   </data>
   <data name="GenericError" xml:space="preserve">
-    <value>Something Went Wrong With TopNotify</value>
+    <value>Something went wrong with TopNotify</value>
     <comment>Generic error message</comment>
   </data>
 
@@ -89,7 +89,7 @@
     <comment>Title for the test notification</comment>
   </data>
   <data name="TestNotificationBody" xml:space="preserve">
-    <value>This Is A Test Notification</value>
+    <value>This is a test notification</value>
     <comment>Body text for the test notification</comment>
   </data>
 

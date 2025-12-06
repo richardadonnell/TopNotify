@@ -30,7 +30,7 @@ export default function About() {
             </div>
 
             <img src="/Image/IconSmall.png"></img>
-            <h4>{t('app.title')}{version}</h4>
+            <h4>{t('app.title')} {version}</h4>
             <h6>{t('about.developedBy')}</h6>
 
             <div className="aboutButtons">
