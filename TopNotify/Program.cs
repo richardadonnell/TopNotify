@@ -17,35 +17,41 @@ using Serilog.Core;
 
 namespace TopNotify.Common
 {
-    public class Program
+    public static class Program
     {
-        public static StoreContext Context = null!;
-        public static Daemon.Daemon Background = null!;
-        public static AppManager GUI = null!;
-        public static IEnumerable<Process> ValidTopNotifyInstances = null!;
-        public static Logger Logger = null!;
+        private const string SettingsArg = "--settings";
 
-        public static bool IsDaemonRunning => ValidTopNotifyInstances.Where((p) => {
+        public static StoreContext Context { get; set; } = null!;
+        public static Daemon.Daemon Background { get; set; } = null!;
+        public static AppManager GUI { get; set; } = null!;
+        public static IEnumerable<Process> ValidTopNotifyInstances { get; set; } = null!;
+        public static Logger Logger { get; set; } = null!;
+
+        public static bool IsDaemonRunning => ValidTopNotifyInstances.Any((p) => {
             try
             {
-                string commandLine;
-                ProcessCommandLine.Retrieve(p, out commandLine, ProcessCommandLine.Parameter.CommandLine);
-                return !commandLine.ToLower().Contains("--settings");
+                ProcessCommandLine.Retrieve(p, out string commandLine, ProcessCommandLine.Parameter.CommandLine);
+                return !commandLine.ToLower().Contains(SettingsArg);
             }
-            catch { }
+            catch
+            {
+                // Intentionally ignored: Process may have exited or be inaccessible
+            }
             return false;
-        }).Any();
+        });
 
-        public static bool IsGUIRunning => ValidTopNotifyInstances.Where((p) => {
+        public static bool IsGUIRunning => ValidTopNotifyInstances.Any((p) => {
             try
             {
-                string commandLine;
-                ProcessCommandLine.Retrieve(p, out commandLine, ProcessCommandLine.Parameter.CommandLine);
-                return commandLine.ToLower().Contains("--settings");
+                ProcessCommandLine.Retrieve(p, out string commandLine, ProcessCommandLine.Parameter.CommandLine);
+                return commandLine.ToLower().Contains(SettingsArg);
             }
-            catch { }
+            catch
+            {
+                // Intentionally ignored: Process may have exited or be inaccessible
+            }
             return false;
-        }).Any();
+        });
 
         [STAThread]
         public static void Main(string[] args)
@@ -67,7 +73,10 @@ namespace TopNotify.Common
                 {
                     return !p.HasExited && p.Id != Process.GetCurrentProcess().Id;
                 }
-                catch { }
+                catch
+                {
+                    // Intentionally ignored: Process may have exited during enumeration
+                }
                 return false;
             });
 
@@ -75,18 +84,18 @@ namespace TopNotify.Common
             var isDaemonRunning = IsDaemonRunning;
 
             #if !GUI_DEBUG
-            if (!args.Contains("--settings") && isDaemonRunning && !isGUIRunning)
+            if (!args.Contains(SettingsArg) && isDaemonRunning && !isGUIRunning)
             {
                 //Open GUI Instead Of Daemon
                 TrayIcon.LaunchSettingsMode(null!, null!);
                 Environment.Exit(1);
             }
-            else if (args.Contains("--settings") && isGUIRunning)
+            else if (args.Contains(SettingsArg) && isGUIRunning)
             {
                 //Exit To Prevent Multiple GUIs
                 Environment.Exit(2);
             }
-            else if (!args.Contains("--settings") && isDaemonRunning && isGUIRunning)
+            else if (!args.Contains(SettingsArg) && isDaemonRunning && isGUIRunning)
             {
                 //Exit To Prevent Multiple Daemons
                 Environment.Exit(3);
@@ -96,7 +105,7 @@ namespace TopNotify.Common
             DesktopPlatformManager.Activate(); // Needed here to initiate plugin DLL loading
 
             #if !GUI_DEBUG
-            if (args.Contains("--settings"))
+            if (args.Contains(SettingsArg))
             #else
             if (true)
             #endif

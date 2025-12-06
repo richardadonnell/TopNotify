@@ -69,7 +69,7 @@
     <div class="border"></div>
     <p class="coordinates"></p>
     <div class="dragMode">
-        <img src="/Image/LeftClick.png">
+        <img src="/Image/LeftClick.png" alt="Left-click icon">
         <div class="instructions">
             <h4>Drag to desired position</h4>
             <p>Left-click to confirm</p>
@@ -94,7 +94,7 @@
 
         // Exit drag mode when clicked
         addEventListener("mouseup", (e) => {
-            if (e.button == 0) {
+            if (e.button === 0) {
                 igniteView.commandBridge.ExitDragMode();
             }
         })
