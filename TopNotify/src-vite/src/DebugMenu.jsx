@@ -20,13 +20,13 @@ export function DebugMenu() {
 
     let setIsOpen = (v) => {
 
-        if (v && rerender < 0) { return; }
+        if (v && window.rerender < 0) { return; }
 
         if (v) {
-            setTimeout(() => setRerender(-9999999), 0);
+            setTimeout(() => window.setRerender(-9999999), 0);
         }
         else {
-            setTimeout(() => setRerender(2), 0);
+            setTimeout(() => window.setRerender(2), 0);
         }
 
         _setIsOpen(v);
@@ -48,11 +48,11 @@ export function DebugMenu() {
                         <Button className="iconButton" onClick={() => setIsOpen(false)}><TbChevronDown/></Button>
                     </div>
 
-                    <DrawerHeader>{t('debug.title')}</DrawerHeader>
+                    <DrawerHeader>{t("debug.title")}</DrawerHeader>
 
                     <DrawerBody>
                         <div className="flexx facenter fillx gap20 buttonContainer">
-                            <label>{t('debug.openAppFolder')}</label>
+                            <label>{t("debug.openAppFolder")}</label>
                             <Button style={{ marginInlineStart: "auto" }} className="iconButton" onClick={() => { igniteView.commandBridge.OpenAppFolder(); }}>
                                 <TbExternalLink/>
                             </Button>
@@ -61,15 +61,15 @@ export function DebugMenu() {
                         <Divider />
 
                         <div className="flexx facenter fillx gap20">
-                            <label>{t('debug.forceFallbackInterceptor')}</label>
-                            <Switch onChange={(e) => ChangeSwitch("EnableDebugForceFallbackMode", e)} isChecked={Config.EnableDebugForceFallbackMode} style={{ marginInlineStart: "auto" }} size='lg' />
+                            <label>{t("debug.forceFallbackInterceptor")}</label>
+                            <Switch onChange={(e) => window.ChangeSwitch("EnableDebugForceFallbackMode", e)} isChecked={window.Config.EnableDebugForceFallbackMode} style={{ marginInlineStart: "auto" }} size="lg" />
                         </div>
 
                         <Divider />
 
                         <div className="flexx facenter fillx gap20">
-                            <label>{t('debug.disableBoundsCorrection')}</label>
-                            <Switch onChange={(e) => ChangeSwitch("EnableDebugRemoveBoundsCorrection", e)} isChecked={Config.EnableDebugRemoveBoundsCorrection} style={{ marginInlineStart: "auto" }} size='lg' />
+                            <label>{t("debug.disableBoundsCorrection")}</label>
+                            <Switch onChange={(e) => window.ChangeSwitch("EnableDebugRemoveBoundsCorrection", e)} isChecked={window.Config.EnableDebugRemoveBoundsCorrection} style={{ marginInlineStart: "auto" }} size="lg" />
                         </div>
                     </DrawerBody>
 

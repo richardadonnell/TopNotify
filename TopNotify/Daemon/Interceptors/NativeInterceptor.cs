@@ -22,35 +22,33 @@ namespace TopNotify.Daemon
         #region WinAPI Methods
 
         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+        private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
 
         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-        public static extern IntPtr FindWindowEx(IntPtr parentHandle, IntPtr hWndChildAfter, string className, string windowTitle);
+        private static extern IntPtr FindWindowEx(IntPtr parentHandle, IntPtr hWndChildAfter, string className, string windowTitle);
 
         [DllImport("user32.dll")]
-        public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
         [DllImport("user32.dll", EntryPoint = "SetWindowPos")]
-        public static extern IntPtr SetWindowPos(IntPtr hWnd, int hWndInsertAfter, int x, int Y, int cx, int cy, int wFlags);
+        private static extern IntPtr SetWindowPos(IntPtr hWnd, int hWndInsertAfter, int x, int Y, int cx, int cy, int wFlags);
 
         [DllImport("user32.dll")]
-        public static extern bool GetWindowRect(IntPtr hwnd, ref Rectangle rectangle);
+        private static extern bool GetWindowRect(IntPtr hwnd, ref Rectangle rectangle);
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(IntPtr hWnd, UInt32 Msg, IntPtr wParam, IntPtr lParam);
+        private static extern IntPtr SendMessage(IntPtr hWnd, UInt32 Msg, IntPtr wParam, IntPtr lParam);
 
         [DllImport("user32.dll", SetLastError = true)]
-        public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint processId);
+        private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint processId);
 
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-        public static extern int GetWindowText(IntPtr hWnd, StringBuilder strText, int maxCount);
+        private static extern int GetWindowText(IntPtr hWnd, StringBuilder strText, int maxCount);
 
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-        public static extern int GetWindowTextLength(IntPtr hWnd);
+        private static extern int GetWindowTextLength(IntPtr hWnd);
 
-        const UInt32 WM_CLOSE = 0x0010;
-        const short SWP_NOMOVE = 0X2;
-        const short SWP_NOSIZE = 1;
+        private const short SWP_NOSIZE = 1;
         const short SWP_NOZORDER = 0X4;
         const int SWP_SHOWWINDOW = 0x0040;
 
@@ -64,13 +62,18 @@ namespace TopNotify.Daemon
 
         #endregion
 
-        public IntPtr hwnd;
-        public ExtendedStyleManager ExStyleManager = null!;
-        public int ScaledPreferredDisplayWidth;
-        public int ScaledPreferredDisplayHeight;
-        public int RealPreferredDisplayWidth;
-        public int RealPreferredDisplayHeight;
-        public float ScaleFactor;
+        public IntPtr hwnd { get; private set; }
+
+        /// <summary>
+        /// Manages extended window styles. Null until Start() is called.
+        /// </summary>
+        public ExtendedStyleManager? ExStyleManager { get; private set; }
+
+        public int ScaledPreferredDisplayWidth { get; private set; }
+        public int ScaledPreferredDisplayHeight { get; private set; }
+        public int RealPreferredDisplayWidth { get; private set; }
+        public int RealPreferredDisplayHeight { get; private set; }
+        public float ScaleFactor { get; private set; }
 
         public override void Start()
         {
@@ -79,15 +82,9 @@ namespace TopNotify.Daemon
             Reflow();
         }
 
-        public override void Restart()
-        {
-            base.Restart();
-        }
-
         // Modified From https://stackoverflow.com/a/20276701/18071273
         public static IEnumerable<IntPtr> FindCoreWindows()
         {
-            IntPtr found = IntPtr.Zero;
             List<IntPtr> windows = new List<IntPtr>();
 
             TopNotifyEnumWindows(delegate (IntPtr hwnd, IntPtr param)
@@ -157,7 +154,11 @@ namespace TopNotify.Daemon
                 Update();
 
             }
-            catch { }
+            catch
+            {
+                // Silently ignore exceptions during notification window detection/positioning
+                // to prevent crashes when windows are rapidly created/destroyed
+            }
         }
 
         public override void OnKeyUpdate()
@@ -166,9 +167,9 @@ namespace TopNotify.Daemon
             Task.Run(async () =>
             {
                 await Task.Delay(100);
-                ExStyleManager.Update(hwnd);
+                ExStyleManager?.Update(hwnd);
             });
-            
+
             base.OnKeyUpdate();
         }
 
@@ -177,7 +178,7 @@ namespace TopNotify.Daemon
             base.Update();
 
             // Update extended styles
-            ExStyleManager.Update(hwnd);
+            ExStyleManager?.Update(hwnd);
 
             // Find The Bounds Of The Notification Window
             Rectangle NotifyRect = new Rectangle();
@@ -190,10 +191,8 @@ namespace TopNotify.Daemon
             var originX = currentMonitorInfo.Monitor.Left;
             var originY = currentMonitorInfo.Monitor.Top;
 
-            var scaledWidth = (int)((NotifyRect.Width - NotifyRect.X * ScaleFactor));
-            var scaledHeight = (int)((NotifyRect.Height - NotifyRect.Y * ScaleFactor));
-            var unscaledWidth = (int)((NotifyRect.Width - NotifyRect.X));
-            var unscaledHeight = (int)((NotifyRect.Height - NotifyRect.Y));
+            var unscaledWidth = NotifyRect.Width - NotifyRect.X;
+            var unscaledHeight = NotifyRect.Height - NotifyRect.Y;
 
             if (Settings.Location == NotifyLocation.TopLeft)
             {

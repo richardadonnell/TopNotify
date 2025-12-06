@@ -24,31 +24,31 @@ window.Config = {
 
 // Called By C#, Sets The window.Config Object To The Saved Config File
 window.SetConfig = async (config) => {
-    Config = JSON.parse(config);
-    window.setRerender(rerender + 1);
+    window.Config = JSON.parse(config);
+    window.setRerender(window.rerender + 1);
 };
 
 window.UploadConfig = () => {
 
-    if (Config.Location == -1) {
+    if (window.Config.Location == -1) {
         //Config Hasn't Loaded Yet
         return;
     }
 
-    igniteView.commandBridge.WriteConfigFile(JSON.stringify(Config));
-    window.setRerender(rerender + 1);
+    igniteView.commandBridge.WriteConfigFile(JSON.stringify(window.Config));
+    window.setRerender(window.rerender + 1);
 };
 
 window.ChangeSwitch = function (key, e) {
-    Config[key] = e.target.checked;
-    UploadConfig();
-    window.setRerender(rerender + 1);
+    window.Config[key] = e.target.checked;
+    window.UploadConfig();
+    window.setRerender(window.rerender + 1);
 };
 
 window.ChangeValue = function (key, e) {
-    Config[key] = e;
-    UploadConfig();
-    window.setRerender(rerender + 1);
+    window.Config[key] = e;
+    window.UploadConfig();
+    window.setRerender(window.rerender + 1);
 };
 
 function App() {
@@ -57,7 +57,7 @@ function App() {
     let [rerender, setRerender] = useState(0);
     window.rerender = rerender;
     window.setRerender = setRerender;
-    
+
     if (useFirstRender()) {
         igniteView.commandBridge.invoke("RequestConfig");
     }
@@ -69,11 +69,11 @@ function App() {
 
             <div data-webview-drag className="draggableHeader">
                 <img src="/Image/IconTiny.png"></img>
-                <h2>{t('app.title')}</h2>
+                <h2>{t("app.title")}</h2>
             </div>
 
             <div className="windowCloseButton">
-                <Button className="iconButton" onClick={() => window.close()}><TbX /></Button>
+                <Button className="iconButton" onClick={() => { window.close(); }}><TbX /></Button>
             </div>
 
             <TestNotification></TestNotification>
@@ -104,9 +104,9 @@ function App() {
                 <ManageNotificationSounds></ManageNotificationSounds>
             </Container>
 
-            <div className='aboutButtons'>
-                <Button onClick={() => igniteView.commandBridge.About()}><TbInfoCircle/>{t('app.about')}</Button>
-                <Button onClick={() => igniteView.commandBridge.Donate()}><TbCurrencyDollar/>{t('app.donate')}</Button>
+            <div className="aboutButtons">
+                <Button onClick={() => igniteView.commandBridge.About()}><TbInfoCircle/>{t("app.about")}</Button>
+                <Button onClick={() => igniteView.commandBridge.Donate()}><TbCurrencyDollar/>{t("app.donate")}</Button>
             </div>
         </div>
     );

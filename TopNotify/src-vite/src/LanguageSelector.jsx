@@ -23,7 +23,7 @@ export default function LanguageSelector() {
 
     return (
         <div className="flexx facenter fillx gap20">
-            <label>{t('settings.language')}</label>
+            <label>{t("settings.language")}</label>
             <Select 
                 value={i18n.resolvedLanguage || "en"} 
                 onChange={handleLanguageChange}

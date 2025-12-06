@@ -7,7 +7,7 @@ export default function TestNotification() {
 
     return (
         <div className="flexx facenter fillx gap20 buttonContainer">
-            <label>{t('settings.spawnTestNotification')}</label>
+            <label>{t("settings.spawnTestNotification")}</label>
             <Button style={{ marginInlineStart: "auto" }} className="iconButton" onClick={() => igniteView.commandBridge.SpawnTestNotification()}>
                 <TbExternalLink />
             </Button>

@@ -22,13 +22,13 @@ export default function ManageNotificationSounds() {
 
     let setIsOpen = (v) => {
 
-        if (v && rerender < 0) { return; }
+        if (v && window.rerender < 0) { return; }
 
         if (v) {
-            setTimeout(() => setRerender(-9999999), 0);
+            setTimeout(() => window.setRerender(-9999999), 0);
         }
         else {
-            setTimeout(() => setRerender(2), 0);
+            setTimeout(() => window.setRerender(2), 0);
         }
 
         _setIsOpen(v);
@@ -41,21 +41,21 @@ export default function ManageNotificationSounds() {
 
     let applySound = (sound) => {
 
-        for (let i = 0; i < Config.AppReferences.length; i++) {
-            if (Config.AppReferences[i].ID == window.soundPickerReferenceID) {
-                Config.AppReferences[i].SoundPath = sound.Path;
-                Config.AppReferences[i].SoundDisplayName = sound.Name;
+        for (let i = 0; i < window.Config.AppReferences.length; i++) {
+            if (window.Config.AppReferences[i].ID == window.soundPickerReferenceID) {
+                window.Config.AppReferences[i].SoundPath = sound.Path;
+                window.Config.AppReferences[i].SoundDisplayName = sound.Name;
                 break;
             }
         }
 
-        UploadConfig();
+        window.UploadConfig();
         setIsPickerOpen(false);
     };
 
     return (
         <div className="flexx facenter fillx gap20 buttonContainer">
-            <label data-greyed-out={(!window.isInterceptionEnabled).toString()}>{t('sounds.editNotificationSounds')}</label>
+            <label data-greyed-out={(!window.isInterceptionEnabled).toString()}>{t("sounds.editNotificationSounds")}</label>
             <Button data-greyed-out={(!window.isInterceptionEnabled).toString()} style={{ marginInlineStart: "auto" }} className="iconButton" onClick={() => setIsOpen(true)}>
                 <TbPencil/>
             </Button>
@@ -71,10 +71,10 @@ export default function ManageNotificationSounds() {
                         <Button className="iconButton" onClick={() => setIsOpen(false)}><TbChevronDown/></Button>
                     </div>
 
-                    <DrawerHeader onMouseOver={window.igniteView.dragWindow}>{t('sounds.notificationSounds')}</DrawerHeader>
+                    <DrawerHeader onMouseOver={window.igniteView.dragWindow}>{t("sounds.notificationSounds")}</DrawerHeader>
 
                     <DrawerBody>
-                        <div className="errorMessage medium"><TbAlertTriangle/>{t('sounds.soundWarning')}</div>
+                        <div className="errorMessage medium"><TbAlertTriangle/>{t("sounds.soundWarning")}</div>
                         {
                             window.Config.AppReferences.map((appReference, i) => {
                                 return (
@@ -86,7 +86,7 @@ export default function ManageNotificationSounds() {
                             })
                         }
                         <Divider/>
-                        <p>{t('sounds.captureHint')}</p>
+                        <p>{t("sounds.captureHint")}</p>
                     </DrawerBody>
 
                     <DrawerFooter>
@@ -134,7 +134,7 @@ function SoundPicker(props) {
                     <Button className="iconButton" onClick={() => props.setIsPickerOpen(false)}><TbX/></Button>
                 </div>
 
-                <DrawerHeader>{t('sounds.selectSound')}</DrawerHeader>
+                <DrawerHeader>{t("sounds.selectSound")}</DrawerHeader>
 
                 <DrawerBody>
                     <div className="soundPackList">
@@ -187,7 +187,7 @@ function SoundPack(props) {
                             }} className="soundItemButton">
                                 <TbMusicPlus/>
                             </Button>
-                            <h5>{t('sounds.import')}&nbsp;<Button onClick={() => igniteView.commandBridge.OpenSoundFolder()} className="iconButton"><TbFolder/></Button></h5>
+                            <h5>{t("sounds.import")}&nbsp;<Button onClick={() => igniteView.commandBridge.OpenSoundFolder()} className="iconButton"><TbFolder/></Button></h5>
                         </div>
                     )
                 }

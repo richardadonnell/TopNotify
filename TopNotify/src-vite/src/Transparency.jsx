@@ -7,14 +7,14 @@ export default function NotificationTransparency() {
 
     return (
         <div className="flexy fillx gap10">
-            <label>{t('settings.notificationTransparency')}</label>
+            <label>{t("settings.notificationTransparency")}</label>
             {
                 //Slider Is In Uncontrolled Mode For Performance Reasons
                 //So We Need To Wait For The Config To Load Before Setting The Default Value
-                (Config.Location < 0) ?
+                (window.Config.Location < 0) ?
                     (<></>) :
                     (
-                        <Slider size="lg" onChangeEnd={ChangeTransparency} defaultValue={Config.Opacity * 20}>
+                        <Slider size="lg" onChangeEnd={ChangeTransparency} defaultValue={window.Config.Opacity * 20}>
                             <SliderTrack>
                                 <SliderFilledTrack />
                             </SliderTrack>
@@ -27,7 +27,7 @@ export default function NotificationTransparency() {
 }
 
 function ChangeTransparency(opacity) {
-    Config.Opacity = (opacity * 0.05);
+    window.Config.Opacity = (opacity * 0.05);
     window.UploadConfig();
-    window.setRerender(rerender + 1);
+    window.setRerender(window.rerender + 1);
 }

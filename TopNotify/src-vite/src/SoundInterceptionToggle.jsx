@@ -15,7 +15,7 @@ export default function SoundInterceptionToggle() {
             window.isInterceptionEnabled = await igniteView.commandBridge.IsSoundInstalledInRegistry();
             setIsInterceptionEnabled(window.isInterceptionEnabled);
             setCheckState("success");
-            window.setRerender(rerender + 1); 
+            window.setRerender(window.rerender + 1); 
         }, 0);
     }
 
@@ -27,14 +27,14 @@ export default function SoundInterceptionToggle() {
             await igniteView.commandBridge.UninstallSoundInRegistry();
         }
 
-        UploadConfig();
+        window.UploadConfig();
 
         setCheckState("none");
     };
 
     return (
         <div className="flexx facenter fillx gap20">
-            <label>{t('settings.enableCustomSounds')}</label>
+            <label>{t("settings.enableCustomSounds")}</label>
             <Switch onChange={(e) => setEnabled(e.target.checked)} isChecked={isInterceptionEnabled} style={{ marginInlineStart: "auto" }} size='lg' />
         </div>
     );

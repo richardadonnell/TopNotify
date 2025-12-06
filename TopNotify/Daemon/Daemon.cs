@@ -14,9 +14,13 @@ namespace TopNotify.Daemon
 {
     public class Daemon
     {
-        public static Daemon Instance = null!;
+        public static Daemon? Instance;
 
-        public InterceptorManager Manager = null!;
+        /// <summary>
+        /// The InterceptorManager instance. May be null until background initialization completes.
+        /// Prefer using InterceptorManager.Instance for access after initialization.
+        /// </summary>
+        public InterceptorManager? Manager;
 
         public Daemon() {
             Instance = this;
@@ -40,7 +44,7 @@ namespace TopNotify.Daemon
             await foreach (var msgBytes in listener.GetNextMessage())
             {
                 var msg = Encoding.UTF8.GetString(msgBytes);
-                
+
                 if (msg == "UpdateConfig") // Runs when the user changes a setting from the GUI
                 {
                     InterceptorManager.Instance.OnSettingsChanged();

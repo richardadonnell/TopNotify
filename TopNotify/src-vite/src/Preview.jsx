@@ -1,5 +1,5 @@
+import "./CSS/Preview.css";
 
-import { Button } from "@chakra-ui/react";
 import {
     TbChevronsDownLeft,
     TbChevronsDownRight,
@@ -7,7 +7,8 @@ import {
     TbChevronsUpRight,
     TbCurrentLocation
 } from "react-icons/tb";
-import "./CSS/Preview.css";
+
+import { Button } from "@chakra-ui/react";
 
 let previewWidth = 352;
 let previewScale = previewWidth / 1920; // Relative to actual scale
@@ -87,7 +88,7 @@ function CalculateNotificationPreviwStyle() {
     return {
         width: CalculateNotificationWindowPreviewStyle().width * 0.919191917,
         height: CalculateNotificationWindowPreviewStyle().height * 0.717105263,
-        opacity: (Config.Opacity != undefined) ? (1 - (Config.Opacity / 5)) : 0
+        opacity: (window.Config.Opacity != undefined) ? (1 - (window.Config.Opacity / 5)) : 0
     };
 }
 

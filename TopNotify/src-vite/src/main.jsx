@@ -29,7 +29,7 @@ window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", eve
 
 ReactDOM.createRoot(document.getElementById("root")).render(RootComponent());
 
-function RootComponent() {
+export function RootComponent() {
     return (
         <ChakraProvider>
             <Suspense fallback={<div></div>}>
@@ -39,7 +39,7 @@ function RootComponent() {
     );
 }
 
-function Dispatcher() {
+export function Dispatcher() {
     const { i18n } = useTranslation();
     
     // Handle RTL/LTR direction changes based on current language

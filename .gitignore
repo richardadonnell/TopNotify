@@ -396,3 +396,7 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 TopNotify/.DS_Store
+
+dist/
+build/
+TopNotify\iv2runtime\TopNotify.igniteview
