@@ -1,10 +1,12 @@
-import { Button, Divider, Switch } from "@chakra-ui/react";
 import {
+    Button,
+    Divider,
     Drawer,
     DrawerBody,
     DrawerContent,
     DrawerFooter,
     DrawerHeader,
+    Switch
 } from "@chakra-ui/react";
 import {TbChevronDown, TbExternalLink} from "react-icons/tb";
 
@@ -14,7 +16,7 @@ import { useTranslation } from "react-i18next";
 export function DebugMenu() {
     const { t } = useTranslation();
 
-    const [isOpen, _setIsOpen] = useState(false);
+    const [drawerOpen, setDrawerOpen] = useState(false);
 
     const setIsOpen = (v) => {
 
@@ -27,7 +29,7 @@ export function DebugMenu() {
             setTimeout(() => window.setRerender(2), 0);
         }
 
-        _setIsOpen(v);
+        setDrawerOpen(v);
     };
 
     window.openDebugMenu = () => setIsOpen(true);
@@ -35,7 +37,7 @@ export function DebugMenu() {
     return (
         <Drawer
             blockScrollOnMount={false}
-            isOpen={isOpen}
+            isOpen={drawerOpen}
             placement='bottom'
             onClose={() => setIsOpen(false)}
         >

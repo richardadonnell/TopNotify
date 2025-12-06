@@ -1,24 +1,25 @@
 import "./CSS/NotificationSounds.css";
 
-import { Button, Divider } from "@chakra-ui/react";
 import {
+    Button,
+    Divider,
     Drawer,
     DrawerBody,
     DrawerContent,
     DrawerFooter,
     DrawerHeader
 } from "@chakra-ui/react";
-import { Fragment, useState } from "react";
+import React, { Fragment, useState } from "react";
 import { TbAlertTriangle, TbChevronDown, TbFolder, TbMusicPlus, TbPencil, TbVolume, TbX } from "react-icons/tb";
 
-import React from "react";
+import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 
 export default function ManageNotificationSounds() {
     const { t } = useTranslation();
 
-    const [isOpen, _setIsOpen] = useState(false);
-    const [isPickerOpen, _setIsPickerOpen] = useState(false);
+    const [isOpen, setIsOpenInternal] = useState(false);
+    const [isPickerOpen, setIsPickerOpenInternal] = useState(false);
 
     const setIsOpen = (v) => {
 
@@ -31,20 +32,20 @@ export default function ManageNotificationSounds() {
             setTimeout(() => window.setRerender(2), 0);
         }
 
-        _setIsOpen(v);
+        setIsOpenInternal(v);
     };
 
     const setIsPickerOpen = (v) => {
-        _setIsOpen(!v);
-        _setIsPickerOpen(v);
+        setIsOpenInternal(!v);
+        setIsPickerOpenInternal(v);
     };
 
     const applySound = (sound) => {
 
-        for (let i = 0; i < window.Config.AppReferences.length; i++) {
-            if (window.Config.AppReferences[i].ID === window.soundPickerReferenceID) {
-                window.Config.AppReferences[i].SoundPath = sound.Path;
-                window.Config.AppReferences[i].SoundDisplayName = sound.Name;
+        for (const appReference of window.Config.AppReferences) {
+            if (appReference.ID === window.soundPickerReferenceID) {
+                appReference.SoundPath = sound.Path;
+                appReference.SoundDisplayName = sound.Name;
                 break;
             }
         }
@@ -66,7 +67,7 @@ export default function ManageNotificationSounds() {
                 onClose={() => setIsOpen(false)}
             >
                 <DrawerContent>
-                    
+
                     <div className="windowCloseButton">
                         <Button className="iconButton" onClick={() => setIsOpen(false)}><TbChevronDown/></Button>
                     </div>
@@ -90,7 +91,7 @@ export default function ManageNotificationSounds() {
                     </DrawerBody>
 
                     <DrawerFooter>
-                        
+
                     </DrawerFooter>
                 </DrawerContent>
             </Drawer>
@@ -117,6 +118,16 @@ function AppReferenceSoundItem(props) {
     );
 }
 
+AppReferenceSoundItem.propTypes = {
+    appReference: PropTypes.shape({
+        ID: PropTypes.string.isRequired,
+        DisplayIcon: PropTypes.string,
+        DisplayName: PropTypes.string.isRequired,
+        SoundDisplayName: PropTypes.string.isRequired,
+    }).isRequired,
+    setIsPickerOpen: PropTypes.func.isRequired,
+};
+
 function SoundPicker(props) {
     const { t } = useTranslation();
     const soundPacks = JSON.parse(igniteView.withReact(React).useCommandResult("FindSounds") || "[]");
@@ -129,7 +140,7 @@ function SoundPicker(props) {
             onClose={() => props.setIsPickerOpen(false)}
         >
             <DrawerContent>
-                
+
                 <div className="windowCloseButton">
                     <Button className="iconButton" onClick={() => props.setIsPickerOpen(false)}><TbX/></Button>
                 </div>
@@ -147,12 +158,18 @@ function SoundPicker(props) {
                 </DrawerBody>
 
                 <DrawerFooter>
-                    
+
                 </DrawerFooter>
             </DrawerContent>
         </Drawer>
     );
 }
+
+SoundPicker.propTypes = {
+    isOpen: PropTypes.bool.isRequired,
+    setIsPickerOpen: PropTypes.func.isRequired,
+    applySound: PropTypes.func.isRequired,
+};
 
 function SoundPack(props) {
     const { t } = useTranslation();
@@ -195,3 +212,16 @@ function SoundPack(props) {
         </div>
     );
 }
+
+SoundPack.propTypes = {
+    soundPack: PropTypes.shape({
+        Name: PropTypes.string.isRequired,
+        Description: PropTypes.string,
+        Sounds: PropTypes.arrayOf(PropTypes.shape({
+            Path: PropTypes.string.isRequired,
+            Name: PropTypes.string.isRequired,
+            Icon: PropTypes.string,
+        })).isRequired,
+    }).isRequired,
+    applySound: PropTypes.func.isRequired,
+};
