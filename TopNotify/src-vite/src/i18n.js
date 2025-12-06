@@ -35,34 +35,34 @@ i18n
     .init({
         // Fallback language if detection fails or translation missing
         fallbackLng: "en",
-        
+
         // Supported languages
         supportedLngs: supportedLngs,
-        
+
         // Don't load region-specific variants (e.g., en-US -> en)
         nonExplicitSupportedLngs: true,
-        
+
         // Debug mode (disable in production)
         debug: false,
-        
+
         // Detection order: localStorage first, then browser navigator
         detection: {
             order: ["localStorage", "navigator"],
             caches: ["localStorage"],
             lookupLocalStorage: "topnotify-language",
         },
-        
+
         // Path to translation files
         backend: {
             loadPath: "/locales/{{lng}}/translation.json",
         },
-        
+
         // React settings
         interpolation: {
             // React already escapes values to prevent XSS
             escapeValue: false,
         },
-        
+
         // Wait for translations to load before rendering
         react: {
             useSuspense: true,

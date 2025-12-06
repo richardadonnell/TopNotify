@@ -13,19 +13,19 @@ export default function LanguageSelector() {
     // Handle language change
     const handleLanguageChange = (e) => {
         const newLang = e.target.value;
-        
+
         // Change the language in i18next (also saves to localStorage via detection config)
         i18n.changeLanguage(newLang);
-        
+
         // Also save to C# settings for persistence
         window.ChangeValue("PreferredLanguage", newLang);
     };
 
     return (
         <div className="flexx facenter fillx gap20">
-            <label>{t("settings.language")}</label>
-            <Select 
-                value={i18n.resolvedLanguage || "en"} 
+            <span>{t("settings.language")}</span>
+            <Select
+                value={i18n.resolvedLanguage || "en"}
                 onChange={handleLanguageChange}
                 style={{ marginInlineStart: "auto", width: "auto", minWidth: "120px" }}
                 size="sm"

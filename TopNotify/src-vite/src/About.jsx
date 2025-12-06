@@ -1,6 +1,6 @@
 import "./CSS/About.css";
 
-import {TbBrandGithub, TbGlobe, TbLicense, TbShoppingBag, TbStar, TbStarFilled, TbWorld, TbX} from "react-icons/tb";
+import {TbBrandGithub, TbLicense, TbShoppingBag, TbStar, TbWorld, TbX} from "react-icons/tb";
 import { useEffect, useState } from "react";
 
 import { Button } from "@chakra-ui/react";

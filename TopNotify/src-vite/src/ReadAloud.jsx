@@ -6,7 +6,7 @@ export default function ReadAloud() {
 
     return (
         <div className="flexx facenter fillx gap20">
-            <label>{t("settings.readNotificationsToMe")}</label>
+            <span>{t("settings.readNotificationsToMe")}</span>
             <Switch onChange={(e) => window.ChangeSwitch("ReadAloud", e)} isChecked={window.Config.ReadAloud} style={{ marginInlineStart: "auto" }} size="lg" />
         </div>
     );

@@ -1,14 +1,12 @@
-import { Button, Divider, Slider, SliderFilledTrack, SliderThumb, SliderTrack, Switch } from "@chakra-ui/react";
+import { Button, Divider, Switch } from "@chakra-ui/react";
 import {
     Drawer,
     DrawerBody,
-    DrawerCloseButton,
     DrawerContent,
     DrawerFooter,
     DrawerHeader,
-    DrawerOverlay
 } from "@chakra-ui/react";
-import {TbChevronDown, TbExternalLink, TbX} from "react-icons/tb";
+import {TbChevronDown, TbExternalLink} from "react-icons/tb";
 
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -16,9 +14,9 @@ import { useTranslation } from "react-i18next";
 export function DebugMenu() {
     const { t } = useTranslation();
 
-    let [isOpen, _setIsOpen] = useState(false);
+    const [isOpen, _setIsOpen] = useState(false);
 
-    let setIsOpen = (v) => {
+    const setIsOpen = (v) => {
 
         if (v && window.rerender < 0) { return; }
 
@@ -35,55 +33,53 @@ export function DebugMenu() {
     window.openDebugMenu = () => setIsOpen(true);
 
     return (
-        <>
-            <Drawer
-                blockScrollOnMount={false}
-                isOpen={isOpen}
-                placement='bottom'
-                onClose={() => setIsOpen(false)}
-            >
-                <DrawerContent>
-                    
-                    <div className="windowCloseButton">
-                        <Button className="iconButton" onClick={() => setIsOpen(false)}><TbChevronDown/></Button>
+        <Drawer
+            blockScrollOnMount={false}
+            isOpen={isOpen}
+            placement='bottom'
+            onClose={() => setIsOpen(false)}
+        >
+            <DrawerContent>
+
+                <div className="windowCloseButton">
+                    <Button className="iconButton" onClick={() => setIsOpen(false)}><TbChevronDown/></Button>
+                </div>
+
+                <DrawerHeader>{t("debug.title")}</DrawerHeader>
+
+                <DrawerBody>
+                    <div className="flexx facenter fillx gap20 buttonContainer">
+                        <span>{t("debug.openAppFolder")}</span>
+                        <Button style={{ marginInlineStart: "auto" }} className="iconButton" onClick={() => { igniteView.commandBridge.OpenAppFolder(); }}>
+                            <TbExternalLink/>
+                        </Button>
                     </div>
 
-                    <DrawerHeader>{t("debug.title")}</DrawerHeader>
+                    <Divider />
 
-                    <DrawerBody>
-                        <div className="flexx facenter fillx gap20 buttonContainer">
-                            <label>{t("debug.openAppFolder")}</label>
-                            <Button style={{ marginInlineStart: "auto" }} className="iconButton" onClick={() => { igniteView.commandBridge.OpenAppFolder(); }}>
-                                <TbExternalLink/>
-                            </Button>
-                        </div>
+                    <div className="flexx facenter fillx gap20">
+                        <span>{t("debug.forceFallbackInterceptor")}</span>
+                        <Switch onChange={(e) => window.ChangeSwitch("EnableDebugForceFallbackMode", e)} isChecked={window.Config.EnableDebugForceFallbackMode} style={{ marginInlineStart: "auto" }} size="lg" />
+                    </div>
 
-                        <Divider />
+                    <Divider />
 
-                        <div className="flexx facenter fillx gap20">
-                            <label>{t("debug.forceFallbackInterceptor")}</label>
-                            <Switch onChange={(e) => window.ChangeSwitch("EnableDebugForceFallbackMode", e)} isChecked={window.Config.EnableDebugForceFallbackMode} style={{ marginInlineStart: "auto" }} size="lg" />
-                        </div>
+                    <div className="flexx facenter fillx gap20">
+                        <span>{t("debug.disableBoundsCorrection")}</span>
+                        <Switch onChange={(e) => window.ChangeSwitch("EnableDebugRemoveBoundsCorrection", e)} isChecked={window.Config.EnableDebugRemoveBoundsCorrection} style={{ marginInlineStart: "auto" }} size="lg" />
+                    </div>
+                </DrawerBody>
 
-                        <Divider />
+                <DrawerFooter>
 
-                        <div className="flexx facenter fillx gap20">
-                            <label>{t("debug.disableBoundsCorrection")}</label>
-                            <Switch onChange={(e) => window.ChangeSwitch("EnableDebugRemoveBoundsCorrection", e)} isChecked={window.Config.EnableDebugRemoveBoundsCorrection} style={{ marginInlineStart: "auto" }} size="lg" />
-                        </div>
-                    </DrawerBody>
-
-                    <DrawerFooter>
-                        
-                    </DrawerFooter>
-                </DrawerContent>
-            </Drawer>
-        </>
+                </DrawerFooter>
+            </DrawerContent>
+        </Drawer>
     );
 }
 
 addEventListener("keydown", (e) => {
-    if (e.key == "F2") {
+    if (e.key === "F2") {
         window.openDebugMenu();
         e.preventDefault();
     }

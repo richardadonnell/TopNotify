@@ -6,7 +6,7 @@ export default function ClickThrough() {
 
     return (
         <div className="flexx facenter fillx gap20">
-            <label>{t("settings.enableClickThrough")}</label>
+            <span>{t("settings.enableClickThrough")}</span>
             <Switch onChange={(e) => window.ChangeSwitch("EnableClickThrough", e)} isChecked={window.Config.EnableClickThrough} style={{ marginInlineStart: "auto" }} size="lg" />
         </div>
     );

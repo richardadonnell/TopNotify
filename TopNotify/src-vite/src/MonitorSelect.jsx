@@ -1,8 +1,7 @@
-import { Button, Divider, Select, Switch } from "@chakra-ui/react";
-
+import { Select } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
 
-export default function MonitorSelect(props) {
+export default function MonitorSelect() {
     const { t } = useTranslation();
 
     return (

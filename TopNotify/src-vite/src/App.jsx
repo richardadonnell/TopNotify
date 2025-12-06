@@ -8,6 +8,7 @@ import ManageNotificationSounds from "./NotificationSounds";
 import MonitorSelect from "./MonitorSelect";
 import NotificationTransparency from "./Transparency";
 import Preview from "./Preview";
+import PropTypes from "prop-types";
 import ReadAloud from "./ReadAloud";
 import SoundInterceptionToggle from "./SoundInterceptionToggle";
 import TestNotification from "./TestNotification";
@@ -30,7 +31,7 @@ window.SetConfig = async (config) => {
 
 window.UploadConfig = () => {
 
-    if (window.Config.Location == -1) {
+    if (window.Config.Location === -1) {
         //Config Hasn't Loaded Yet
         return;
     }
@@ -39,13 +40,13 @@ window.UploadConfig = () => {
     window.setRerender(window.rerender + 1);
 };
 
-window.ChangeSwitch = function (key, e) {
+window.ChangeSwitch = (key, e) => {
     window.Config[key] = e.target.checked;
     window.UploadConfig();
     window.setRerender(window.rerender + 1);
 };
 
-window.ChangeValue = function (key, e) {
+window.ChangeValue = (key, e) => {
     window.Config[key] = e;
     window.UploadConfig();
     window.setRerender(window.rerender + 1);
@@ -54,7 +55,7 @@ window.ChangeValue = function (key, e) {
 function App() {
     const { t } = useTranslation();
 
-    let [rerender, setRerender] = useState(0);
+    const [rerender, setRerender] = useState(0);
     window.rerender = rerender;
     window.setRerender = setRerender;
 
@@ -63,12 +64,12 @@ function App() {
     }
 
     return (
-        <div className={"app" + ((rerender > 0) ? " loaded" : "")}>
+        <div className={`app${(rerender > 0) ? " loaded" : ""}`}>
 
             <DebugMenu></DebugMenu>
 
             <div data-webview-drag className="draggableHeader">
-                <img src="/Image/IconTiny.png"></img>
+                <img src="/Image/IconTiny.png" alt="TopNotify logo"></img>
                 <h2>{t("app.title")}</h2>
             </div>
 
@@ -83,8 +84,8 @@ function App() {
             <MonitorSelect></MonitorSelect>
 
             {
-                window.errorList?.map((error, i) => {
-                    return (<ErrorMessage key={i} error={error}></ErrorMessage>);
+                window.errorList?.map((error) => {
+                    return (<ErrorMessage key={error.ID} error={error}></ErrorMessage>);
                 })
             }
 
@@ -117,6 +118,13 @@ function ErrorMessage(props) {
         <div className="errorMessage"><TbAlertTriangle/>{props.error.Text}</div>
     );
 }
+
+ErrorMessage.propTypes = {
+    error: PropTypes.shape({
+        ID: PropTypes.string.isRequired,
+        Text: PropTypes.string.isRequired
+    }).isRequired
+};
 
 
 export default App;

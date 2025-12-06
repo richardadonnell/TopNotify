@@ -13,15 +13,15 @@ import { useTranslation } from "react-i18next";
 // Initialize i18next
 
 
-window.serverURL = "http://" + window.location.host + "/";
+window.serverURL = `http://${window.location.host}/`;
 
 //Chakra UI Color Mode
-let defaultTheme = (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
+const defaultTheme = window.matchMedia?.("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 localStorage.setItem("chakra-ui-color-mode", defaultTheme);
 document.documentElement.setAttribute("data-theme", defaultTheme);
-document.body.setAttribute("chakra-ui-theme", "chakra-ui-" + defaultTheme);
+document.body.setAttribute("chakra-ui-theme", `chakra-ui-${defaultTheme}`);
 
-window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", event => {
+window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
     location.reload();
 });
 
@@ -41,20 +41,20 @@ export function RootComponent() {
 
 export function Dispatcher() {
     const { i18n } = useTranslation();
-    
+
     // Handle RTL/LTR direction changes based on current language
     useEffect(() => {
         const dir = i18n.dir(i18n.resolvedLanguage);
         document.documentElement.dir = dir;
         document.documentElement.lang = i18n.resolvedLanguage || "en";
     }, [i18n, i18n.resolvedLanguage]);
-    
+
     let MainMethod = App;
 
     if (window.location.search.includes("about")) {
         MainMethod = About;
     }
-    
+
     return (
         <MainMethod></MainMethod>
     );

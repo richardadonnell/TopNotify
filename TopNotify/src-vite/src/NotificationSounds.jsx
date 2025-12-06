@@ -17,10 +17,10 @@ import { useTranslation } from "react-i18next";
 export default function ManageNotificationSounds() {
     const { t } = useTranslation();
 
-    let [isOpen, _setIsOpen] = useState(false);
-    let [isPickerOpen, _setIsPickerOpen] = useState(false);
+    const [isOpen, _setIsOpen] = useState(false);
+    const [isPickerOpen, _setIsPickerOpen] = useState(false);
 
-    let setIsOpen = (v) => {
+    const setIsOpen = (v) => {
 
         if (v && window.rerender < 0) { return; }
 
@@ -34,15 +34,15 @@ export default function ManageNotificationSounds() {
         _setIsOpen(v);
     };
 
-    let setIsPickerOpen = (v, id) => {
+    const setIsPickerOpen = (v) => {
         _setIsOpen(!v);
         _setIsPickerOpen(v);
     };
 
-    let applySound = (sound) => {
+    const applySound = (sound) => {
 
         for (let i = 0; i < window.Config.AppReferences.length; i++) {
-            if (window.Config.AppReferences[i].ID == window.soundPickerReferenceID) {
+            if (window.Config.AppReferences[i].ID === window.soundPickerReferenceID) {
                 window.Config.AppReferences[i].SoundPath = sound.Path;
                 window.Config.AppReferences[i].SoundDisplayName = sound.Name;
                 break;
@@ -55,7 +55,7 @@ export default function ManageNotificationSounds() {
 
     return (
         <div className="flexx facenter fillx gap20 buttonContainer">
-            <label data-greyed-out={(!window.isInterceptionEnabled).toString()}>{t("sounds.editNotificationSounds")}</label>
+            <span data-greyed-out={(!window.isInterceptionEnabled).toString()}>{t("sounds.editNotificationSounds")}</span>
             <Button data-greyed-out={(!window.isInterceptionEnabled).toString()} style={{ marginInlineStart: "auto" }} className="iconButton" onClick={() => setIsOpen(true)}>
                 <TbPencil/>
             </Button>
@@ -76,9 +76,9 @@ export default function ManageNotificationSounds() {
                     <DrawerBody>
                         <div className="errorMessage medium"><TbAlertTriangle/>{t("sounds.soundWarning")}</div>
                         {
-                            window.Config.AppReferences.map((appReference, i) => {
+                            window.Config.AppReferences.map((appReference) => {
                                 return (
-                                    <Fragment key={i}>
+                                    <Fragment key={appReference.ID}>
                                         <Divider/>
                                         <AppReferenceSoundItem setIsPickerOpen={setIsPickerOpen} appReference={appReference}></AppReferenceSoundItem>
                                     </Fragment>
@@ -101,14 +101,14 @@ export default function ManageNotificationSounds() {
 
 function AppReferenceSoundItem(props) {
 
-    let pickSound = () => {
+    const pickSound = () => {
         window.soundPickerReferenceID = props.appReference.ID;
         props.setIsPickerOpen(true);
     };
 
     return (
         <div className="appReferenceSoundItem">
-            <img src={props.appReference.DisplayIcon || "/Image/DefaultAppReferenceIcon.svg"}></img>
+            <img src={props.appReference.DisplayIcon || "/Image/DefaultAppReferenceIcon.svg"} alt={props.appReference.DisplayName}></img>
             <h4>{props.appReference.DisplayName}</h4>
             <div className="selectSoundButton">
                 <Button onClick={pickSound}>{props.appReference.SoundDisplayName}&nbsp;<TbPencil/></Button>
@@ -139,8 +139,8 @@ function SoundPicker(props) {
                 <DrawerBody>
                     <div className="soundPackList">
                         {
-                            soundPacks.map((soundPack, i) => {
-                                return (<SoundPack applySound={props.applySound} soundPack={soundPack} key={i}></SoundPack>);
+                            soundPacks.map((soundPack) => {
+                                return (<SoundPack applySound={props.applySound} soundPack={soundPack} key={soundPack.Name}></SoundPack>);
                             })
                         }
                     </div>
@@ -156,7 +156,7 @@ function SoundPicker(props) {
 
 function SoundPack(props) {
     const { t } = useTranslation();
-    let playSound = (sound) => igniteView.commandBridge.PreviewSound(sound.Path);
+    const playSound = (sound) => igniteView.commandBridge.PreviewSound(sound.Path);
 
     return (
         <div className="soundPack">
@@ -165,11 +165,11 @@ function SoundPack(props) {
             <Divider></Divider>
             <div className="soundList">
                 {
-                    props.soundPack.Sounds.map((sound, i) => {
+                    props.soundPack.Sounds.map((sound) => {
                         return (
-                            <div className="soundItem" key={i}>
+                            <div className="soundItem" key={sound.Path}>
                                 <Button onClick={() => props.applySound(sound)} className="soundItemButton">
-                                    <img src={sound.Icon}></img>
+                                    <img src={sound.Icon} alt={sound.Name}></img>
                                 </Button>
                                 <h5>{sound.Name}&nbsp;<Button onClick={() => playSound(sound)} className="iconButton"><TbVolume/></Button></h5>
                             </div>
@@ -177,11 +177,11 @@ function SoundPack(props) {
                     })
                 }
                 {
-                    props.soundPack.Name == "Your Collection" && (
+                    props.soundPack.Name === "Your Collection" && (
                         <div className="soundItem" key={"add"}>
                             <Button onClick={async () => {
-                                let result = await igniteView.commandBridge.ImportSound();
-                                if (result.length == 2) {
+                                const result = await igniteView.commandBridge.ImportSound();
+                                if (result.length === 2) {
                                     props.applySound({ Path: result[0], Name: result[1] });
                                 }
                             }} className="soundItemButton">
