@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TopNotify.Resources;
 
 namespace TopNotify.Daemon
 {
@@ -10,7 +11,7 @@ namespace TopNotify.Daemon
     public class DaemonError
     {
         public string ID = "generic_error";
-        public string Text = "Something Went Wrong With TopNotify";
+        public string Text = Strings.GenericError;
 
         public DaemonError(string id, string text) 
         { 

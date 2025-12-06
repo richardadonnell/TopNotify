@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TopNotify.Common;
+using TopNotify.Resources;
 
 namespace TopNotify.Daemon
 {
@@ -17,7 +18,7 @@ namespace TopNotify.Daemon
         public static void ThrowNonCritical(DaemonError error)
         {
             Errors.Add(error);
-            NotificationTester.Toast("Something Went Wrong", error.Text);
+            NotificationTester.Toast(Strings.ErrorTitle, error.Text);
         }
 
         /// <summary>
@@ -26,7 +27,7 @@ namespace TopNotify.Daemon
         public static void ThrowCritical(DaemonError error)
         {
             Errors.Add(error);
-            NotificationTester.Toast("Something Went Wrong", error.Text);
+            NotificationTester.Toast(Strings.ErrorTitle, error.Text);
             Environment.Exit(1);
         }
     }

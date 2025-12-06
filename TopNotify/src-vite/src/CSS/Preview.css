@@ -9,6 +9,7 @@
     border-bottom-left-radius: 0px;
     position: relative;
     margin-top: 10px;
+    margin-bottom: 10px;
     overflow: hidden;
     display: flex;
     justify-content: center;
@@ -71,7 +72,7 @@
     height: 2rem;
 }
 
-.previewContainer .customLocationSelectButton { 
+.previewContainer .customLocationSelectButton {
     position: absolute;
     margin: auto;
     top: 0;
@@ -83,6 +84,7 @@
 .monitorSelect {
     border-top-left-radius: 0px !important;
     border-top-right-radius: 0px !important;
+    /* margin-top: 2rem !important; */
 }
 
 @media (prefers-color-scheme: dark) {

@@ -93,7 +93,7 @@ namespace TopNotify.GUI
             // Preview width is 352px, so preview height = 352 * aspect
             // Add fixed UI height for header, dropdown, controls, buttons, and padding
             float previewHeight = 352f * aspect;
-            float windowHeight = previewHeight + 420f;
+            float windowHeight = previewHeight + 450f;
 
             target.Bounds = new WindowBounds((int)(400f * ResolutionFinder.GetScale()), (int)(windowHeight * ResolutionFinder.GetScale()));
 

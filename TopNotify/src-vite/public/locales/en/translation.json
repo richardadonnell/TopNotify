@@ -1,0 +1,43 @@
+{
+  "app": {
+    "title": "TopNotify",
+    "about": "About TopNotify",
+    "donate": "Donate"
+  },
+  "about": {
+    "title": "About",
+    "developedBy": "Developed by SamsidParty • Powered by IgniteView",
+    "officialWebsite": "Official Website",
+    "github": "GitHub",
+    "microsoftStore": "Microsoft Store",
+    "leaveReview": "Leave A Review",
+    "license": "License"
+  },
+  "settings": {
+    "enableClickThrough": "Enable Click-Through",
+    "notificationTransparency": "Notification Transparency",
+    "readNotificationsToMe": "Read Notifications To Me",
+    "enableCustomSounds": "Enable Custom Sounds",
+    "spawnTestNotification": "Spawn Test Notification",
+    "primaryMonitor": "Primary Monitor",
+    "language": "Language"
+  },
+  "sounds": {
+    "editNotificationSounds": "Edit Notification Sounds",
+    "notificationSounds": "Notification Sounds",
+    "soundWarning": "Some apps will play their own sounds, you may have to turn them off in-app to prevent overlapping audio.",
+    "captureHint": "When an app sends a notification, TopNotify will capture it and it will show up here for you to modify the sounds.",
+    "selectSound": "Select Sound",
+    "import": "Import"
+  },
+  "debug": {
+    "title": "Debug Menu",
+    "openAppFolder": "Open App Folder",
+    "forceFallbackInterceptor": "Force Fallback Interceptor",
+    "disableBoundsCorrection": "Disable Bounds Correction"
+  },
+  "drag": {
+    "dragToPosition": "Drag to desired position",
+    "leftClickToConfirm": "Left-click to confirm"
+  }
+}

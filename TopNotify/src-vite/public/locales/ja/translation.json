@@ -1,0 +1,43 @@
+{
+  "app": {
+    "title": "TopNotify",
+    "about": "TopNotifyについて",
+    "donate": "寄付する"
+  },
+  "about": {
+    "title": "概要",
+    "developedBy": "SamsidParty開発 • IgniteView搭載",
+    "officialWebsite": "公式サイト",
+    "github": "GitHub",
+    "microsoftStore": "Microsoft Store",
+    "leaveReview": "レビューを書く",
+    "license": "ライセンス"
+  },
+  "settings": {
+    "enableClickThrough": "クリックスルーを有効にする",
+    "notificationTransparency": "通知の透明度",
+    "readNotificationsToMe": "通知を読み上げる",
+    "enableCustomSounds": "カスタムサウンドを有効にする",
+    "spawnTestNotification": "テスト通知を生成",
+    "primaryMonitor": "プライマリモニター",
+    "language": "言語"
+  },
+  "sounds": {
+    "editNotificationSounds": "通知音を編集",
+    "notificationSounds": "通知音",
+    "soundWarning": "一部のアプリは独自のサウンドを再生します。音声の重複を防ぐため、アプリ内でオフにする必要がある場合があります。",
+    "captureHint": "アプリが通知を送信すると、TopNotifyがそれをキャプチャし、ここに表示されます。サウンドを変更できます。",
+    "selectSound": "サウンドを選択",
+    "import": "インポート"
+  },
+  "debug": {
+    "title": "デバッグメニュー",
+    "openAppFolder": "アプリフォルダを開く",
+    "forceFallbackInterceptor": "フォールバックインターセプターを強制",
+    "disableBoundsCorrection": "境界補正を無効にする"
+  },
+  "drag": {
+    "dragToPosition": "希望の位置にドラッグ",
+    "leftClickToConfirm": "左クリックで確定"
+  }
+}

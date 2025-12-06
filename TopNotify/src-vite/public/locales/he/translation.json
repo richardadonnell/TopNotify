@@ -1,0 +1,43 @@
+{
+  "app": {
+    "title": "TopNotify",
+    "about": "אודות TopNotify",
+    "donate": "תרומה"
+  },
+  "about": {
+    "title": "אודות",
+    "developedBy": "פותח על ידי SamsidParty • מופעל באמצעות IgniteView",
+    "officialWebsite": "אתר רשמי",
+    "github": "GitHub",
+    "microsoftStore": "Microsoft Store",
+    "leaveReview": "השאר ביקורת",
+    "license": "רישיון"
+  },
+  "settings": {
+    "enableClickThrough": "אפשר לחיצה דרך",
+    "notificationTransparency": "שקיפות התראות",
+    "readNotificationsToMe": "הקרא לי התראות",
+    "enableCustomSounds": "אפשר צלילים מותאמים אישית",
+    "spawnTestNotification": "צור התראת בדיקה",
+    "primaryMonitor": "מסך ראשי",
+    "language": "שפה"
+  },
+  "sounds": {
+    "editNotificationSounds": "ערוך צלילי התראות",
+    "notificationSounds": "צלילי התראות",
+    "soundWarning": "חלק מהאפליקציות משמיעות צלילים משלהן, ייתכן שתצטרך לכבות אותם באפליקציה כדי למנוע חפיפת שמע.",
+    "captureHint": "כאשר אפליקציה שולחת התראה, TopNotify תלכוד אותה והיא תופיע כאן כדי שתוכל לשנות את הצלילים.",
+    "selectSound": "בחר צליל",
+    "import": "ייבוא"
+  },
+  "debug": {
+    "title": "תפריט ניפוי באגים",
+    "openAppFolder": "פתח תיקיית אפליקציה",
+    "forceFallbackInterceptor": "כפה מיירט גיבוי",
+    "disableBoundsCorrection": "השבת תיקון גבולות"
+  },
+  "drag": {
+    "dragToPosition": "גרור למיקום הרצוי",
+    "leftClickToConfirm": "לחץ שמאלי לאישור"
+  }
+}

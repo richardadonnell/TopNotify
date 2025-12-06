@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TopNotify.Daemon;
 using TopNotify.GUI;
+using TopNotify.Resources;
 
 namespace TopNotify.Common
 {
@@ -14,7 +15,7 @@ namespace TopNotify.Common
     {
         public static string CreateBugReport()
         {
-            var report = "Please paste the below text into a GitHub issue (https://github.com/SamsidParty/TopNotify/issues)\n\n\n";
+            var report = Strings.BugReportHeader + "\n\n\n";
 
             var nativeInterceptor = InterceptorManager.Instance.Interceptors.Where((t) => t.GetType() == typeof(NativeInterceptor)).First() as NativeInterceptor;
 

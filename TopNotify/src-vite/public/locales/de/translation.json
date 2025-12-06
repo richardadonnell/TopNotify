@@ -1,0 +1,43 @@
+{
+  "app": {
+    "title": "TopNotify",
+    "about": "Über TopNotify",
+    "donate": "Spenden"
+  },
+  "about": {
+    "title": "Über",
+    "developedBy": "Entwickelt von SamsidParty • Unterstützt von IgniteView",
+    "officialWebsite": "Offizielle Webseite",
+    "github": "GitHub",
+    "microsoftStore": "Microsoft Store",
+    "leaveReview": "Bewertung hinterlassen",
+    "license": "Lizenz"
+  },
+  "settings": {
+    "enableClickThrough": "Durchklicken aktivieren",
+    "notificationTransparency": "Benachrichtigungstransparenz",
+    "readNotificationsToMe": "Benachrichtigungen vorlesen",
+    "enableCustomSounds": "Benutzerdefinierte Töne aktivieren",
+    "spawnTestNotification": "Testbenachrichtigung erstellen",
+    "primaryMonitor": "Primärer Bildschirm",
+    "language": "Sprache"
+  },
+  "sounds": {
+    "editNotificationSounds": "Benachrichtigungstöne bearbeiten",
+    "notificationSounds": "Benachrichtigungstöne",
+    "soundWarning": "Einige Apps spielen ihre eigenen Töne ab. Möglicherweise müssen Sie diese in der App deaktivieren, um überlappende Audios zu vermeiden.",
+    "captureHint": "Wenn eine App eine Benachrichtigung sendet, erfasst TopNotify diese und sie wird hier angezeigt, damit Sie die Töne ändern können.",
+    "selectSound": "Ton auswählen",
+    "import": "Importieren"
+  },
+  "debug": {
+    "title": "Debug-Menü",
+    "openAppFolder": "App-Ordner öffnen",
+    "forceFallbackInterceptor": "Fallback-Interceptor erzwingen",
+    "disableBoundsCorrection": "Grenzkorrektur deaktivieren"
+  },
+  "drag": {
+    "dragToPosition": "An gewünschte Position ziehen",
+    "leftClickToConfirm": "Linksklick zum Bestätigen"
+  }
+}

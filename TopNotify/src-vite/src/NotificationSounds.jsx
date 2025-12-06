@@ -1,9 +1,6 @@
-import { Button, Divider } from "@chakra-ui/react";
-
-import { Fragment, useState } from "react";
-
 import "./CSS/NotificationSounds.css";
 
+import { Button, Divider } from "@chakra-ui/react";
 import {
     Drawer,
     DrawerBody,
@@ -11,10 +8,14 @@ import {
     DrawerFooter,
     DrawerHeader
 } from "@chakra-ui/react";
-import React from "react";
+import { Fragment, useState } from "react";
 import { TbAlertTriangle, TbChevronDown, TbFolder, TbMusicPlus, TbPencil, TbVolume, TbX } from "react-icons/tb";
 
+import React from "react";
+import { useTranslation } from "react-i18next";
+
 export default function ManageNotificationSounds() {
+    const { t } = useTranslation();
 
     let [isOpen, _setIsOpen] = useState(false);
     let [isPickerOpen, _setIsPickerOpen] = useState(false);
@@ -54,8 +55,8 @@ export default function ManageNotificationSounds() {
 
     return (
         <div className="flexx facenter fillx gap20 buttonContainer">
-            <label data-greyed-out={(!window.isInterceptionEnabled).toString()}>Edit Notification Sounds</label>
-            <Button data-greyed-out={(!window.isInterceptionEnabled).toString()} style={{ marginLeft: "auto" }} className="iconButton" onClick={() => setIsOpen(true)}>
+            <label data-greyed-out={(!window.isInterceptionEnabled).toString()}>{t('sounds.editNotificationSounds')}</label>
+            <Button data-greyed-out={(!window.isInterceptionEnabled).toString()} style={{ marginInlineStart: "auto" }} className="iconButton" onClick={() => setIsOpen(true)}>
                 <TbPencil/>
             </Button>
             <Drawer
@@ -70,10 +71,10 @@ export default function ManageNotificationSounds() {
                         <Button className="iconButton" onClick={() => setIsOpen(false)}><TbChevronDown/></Button>
                     </div>
 
-                    <DrawerHeader onMouseOver={window.igniteView.dragWindow}>Notification Sounds</DrawerHeader>
+                    <DrawerHeader onMouseOver={window.igniteView.dragWindow}>{t('sounds.notificationSounds')}</DrawerHeader>
 
                     <DrawerBody>
-                        <div className="errorMessage medium"><TbAlertTriangle/>Some apps will play their own sounds, you may have to turn them off in-app to prevent overlapping audio.</div>
+                        <div className="errorMessage medium"><TbAlertTriangle/>{t('sounds.soundWarning')}</div>
                         {
                             window.Config.AppReferences.map((appReference, i) => {
                                 return (
@@ -85,7 +86,7 @@ export default function ManageNotificationSounds() {
                             })
                         }
                         <Divider/>
-                        <p>When an app sends a notification, TopNotify will capture it and it will show up here for you to modify the sounds.</p>
+                        <p>{t('sounds.captureHint')}</p>
                     </DrawerBody>
 
                     <DrawerFooter>
@@ -117,7 +118,7 @@ function AppReferenceSoundItem(props) {
 }
 
 function SoundPicker(props) {
-
+    const { t } = useTranslation();
     const soundPacks = JSON.parse(igniteView.withReact(React).useCommandResult("FindSounds") || "[]");
 
     return (
@@ -133,7 +134,7 @@ function SoundPicker(props) {
                     <Button className="iconButton" onClick={() => props.setIsPickerOpen(false)}><TbX/></Button>
                 </div>
 
-                <DrawerHeader>Select Sound</DrawerHeader>
+                <DrawerHeader>{t('sounds.selectSound')}</DrawerHeader>
 
                 <DrawerBody>
                     <div className="soundPackList">
@@ -154,7 +155,7 @@ function SoundPicker(props) {
 }
 
 function SoundPack(props) {
-
+    const { t } = useTranslation();
     let playSound = (sound) => igniteView.commandBridge.PreviewSound(sound.Path);
 
     return (
@@ -186,7 +187,7 @@ function SoundPack(props) {
                             }} className="soundItemButton">
                                 <TbMusicPlus/>
                             </Button>
-                            <h5>Import&nbsp;<Button onClick={() => igniteView.commandBridge.OpenSoundFolder()} className="iconButton"><TbFolder/></Button></h5>
+                            <h5>{t('sounds.import')}&nbsp;<Button onClick={() => igniteView.commandBridge.OpenSoundFolder()} className="iconButton"><TbFolder/></Button></h5>
                         </div>
                     )
                 }
